@@ -1,7 +1,9 @@
-// FIX: Import ComponentType from React to be used in the Category interface.
 import type { ComponentType } from 'react';
 
 export type Language = 'en' | 'ar' | 'ku';
+
+export type ListingType = 'events' | 'restaurants' | 'cafes' | 'hotels' | 'experiences' | 'deals';
+export type SortOption = 'default' | 'rating' | 'newest' | 'price_low' | 'price_high';
 
 export interface Story {
   id: number;
@@ -10,14 +12,13 @@ export interface Story {
 }
 
 export interface Subcategory {
-    id: string;
-    labelKey: keyof TranslationSet['subcategories'];
+  id: string;
+  labelKey: keyof TranslationSet['subcategories'];
 }
 
 export interface Category {
   id: string;
   labelKey: keyof TranslationSet['categories'];
-  // FIX: Use imported ComponentType to fix "Cannot find namespace 'React'" error.
   icon: ComponentType<{ className?: string }>;
   subcategories: Subcategory[];
 }
@@ -54,22 +55,113 @@ export interface Deal {
   governorate: string;
 }
 
+export interface City {
+  id: string;
+  name_en: string;
+  name_ar: string;
+  name_ku: string;
+  image_url: string;
+}
+
+export interface Listing {
+  id: string;
+  type: ListingType;
+  title: string;
+  city: string;
+  image_url: string;
+  price?: string;
+  price_range?: string;
+  rating: number;
+  description: string;
+  tags: string[];
+  featured: boolean;
+  phone?: string;
+  website?: string;
+  opening_hours?: string;
+  event_datetime?: string;
+  created_at: string;
+}
+
 export interface TranslationSet {
-  header: {
-    home: string;
-    explore: string;
-    businesses: string;
+  [key: string]: unknown;
+  appName?: string;
+  tagline?: string;
+  nav?: {
+    home?: string;
+    cities: string;
+    directory?: string;
     deals: string;
-    login: string;
-  },
-  hero: {
-    mainTitle: string;
+    about?: string;
+  };
+  common?: {
+    search: string;
     searchPlaceholder: string;
-    searchButton: string;
-    voiceSearchTooltip: string;
-    listening: string;
-    filterByGovernorate: string;
-  },
+    city: string;
+    allCities: string;
+    allTypes: string;
+    type: string;
+    rating: string;
+    price: string;
+    share: string;
+    copied: string;
+    featured: string;
+    viewDetails: string;
+    noResults: string;
+    reset: string;
+    newest: string;
+    byRating: string;
+    lowToHigh: string;
+    highToLow: string;
+    all: string;
+  };
+  home?: {
+    heroTitle: string;
+    heroSubtitle: string;
+    browseCities: string;
+    tonight: string;
+    featuredVenues: string;
+    deals: string;
+    categoriesTitle: string;
+    categoryTabs: Record<ListingType, string>;
+  };
+  cityPage?: {
+    searchInCity: string;
+    tabs: {
+      all: string;
+      events: string;
+      restaurantsAndCafes: string;
+      hotels: string;
+      experiences: string;
+    };
+  };
+  directory?: {
+    title: string;
+    searchPlaceholder: string;
+    filterType: string;
+    filterCity: string;
+    filterPrice: string;
+    filterRating: string;
+    sortBy: string;
+  };
+  listing?: {
+    related: string;
+    openingHours: string;
+    eventTime: string;
+    phone: string;
+    website: string;
+  };
+  searchPage?: {
+    title: string;
+    subtitle: string;
+  };
+  about?: {
+    title: string;
+    body: string;
+  };
+  footer?: {
+    linksTitle: string;
+    copyright: string;
+  };
   governorates: {
     all: string;
     baghdad: string;
@@ -77,7 +169,7 @@ export interface TranslationSet {
     basra: string;
     slemani: string;
     duhok: string;
-  },
+  };
   categories: {
     food: string;
     events: string;
@@ -88,78 +180,18 @@ export interface TranslationSet {
     health: string;
     transport: string;
     emergency: string;
-  },
+  };
   subcategories: {
     [key: string]: string;
-  },
-  categoryModal: {
-    title: string;
-    allCategory: string;
-  },
-  featuredBusinesses: {
-    title: string;
-  },
-  curatedEvents: {
-    title: string;
-    description: string;
-    generateButton: string;
-    generating: string;
-    error: string;
-    aiCurated: string;
-  },
-  dealsMarketplace: {
-    title: string;
-    claimed: string;
-    expiresIn: string;
-    days: string;
-    hours: string;
-    minutes: string;
-    seconds: string;
-  },
-  businessDirectory: {
-    title: string;
-    searchPlaceholder: string;
-    filterByGovernorate: string;
-    filterByCategory: string;
-    filterByPrice: string;
-    filterByRating: string;
-    sortBy: string;
-    allGovernorates: string;
-    allCategories: string;
-    priceAll: string;
-    priceLow: string;
-    priceMid: string;
-    priceHigh: string;
-    ratingAll: string;
-    sortDefault: string;
-    sortNameAsc: string;
-    sortRatingDesc: string;
-    resetFilters: string;
-    noResults: string;
-  },
-  storyViewer: {
-    close: string;
-    next: string;
-    previous: string;
-  },
-  cityNavigator: {
-    title: string;
-    description: string;
-    searchPlaceholder: string;
-    planJourneyButton: string;
-  },
-  accessibilityHub: {
-    title: string;
-    description: string;
-    settingsTitle: string;
-    fontSize: string;
-    fontSizeSmall: string;
-    fontSizeDefault: string;
-    fontSizeLarge: string;
-    reduceMotion: string;
-    motionEnabled: string;
-    motionReduced: string;
-    findInclusiveEventsTitle: string;
-    accessibleVenue: string;
-  }
+  };
+
+  header?: { home: string; explore: string; businesses: string; deals: string; login: string; };
+  hero?: { [key: string]: string; };
+  featuredBusinesses?: { title: string; };
+  curatedEvents?: { [key: string]: string; };
+  dealsMarketplace?: { [key: string]: string; };
+  businessDirectory?: { [key: string]: string; };
+  storyViewer?: { close: string; next: string; previous: string; };
+  cityNavigator?: { [key: string]: string; };
+  accessibilityHub?: { [key: string]: string; };
 }

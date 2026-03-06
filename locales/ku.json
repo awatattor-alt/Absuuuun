@@ -1,0 +1,56 @@
+{
+  "appName": "Iraq Compass",
+  "tagline": "شارەکانی عێراق و شوێنە باشەکان بدۆزەوە.",
+  "nav": { "home": "سەرەتا", "cities": "شارەکان", "directory": "ڕێنمایی", "deals": "ئۆفەرەکان", "about": "دەربارە" },
+  "common": {
+    "search": "گەڕان",
+    "searchPlaceholder": "بە ناو، شار، یان تاگ بگەڕێ...",
+    "city": "شار",
+    "allCities": "هەموو شارەکان",
+    "allTypes": "هەموو جۆرەکان",
+    "type": "جۆر",
+    "rating": "هەڵسەنگاندن",
+    "price": "نرخ",
+    "share": "هاوبەشکردن",
+    "copied": "کۆپی کرا!",
+    "featured": "تایبەتمەند",
+    "viewDetails": "بینینی وردەکاری",
+    "noResults": "هیچ ئەنجامێک نەدۆزرایەوە.",
+    "reset": "دووبارەڕێکخستن",
+    "newest": "نوێترین",
+    "byRating": "بەپێی هەڵسەنگاندن",
+    "lowToHigh": "نرخ لە نزم بۆ بەرز",
+    "highToLow": "نرخ لە بەرز بۆ نزم",
+    "all": "هەموو"
+  },
+  "home": {
+    "heroTitle": "باشترین شوێنەکان لە عێراق بدۆزەوە",
+    "heroSubtitle": "لە ڕێنمایی کاروبارەوە بۆ چالاکی ئەم شەوە و ئوفەری شارەکان.",
+    "browseCities": "گەڕان بە پێی شار",
+    "tonight": "ئەمشەو چی هەیە",
+    "featuredVenues": "شوێن و کاروباری تایبەتمەند",
+    "deals": "بازاڕی ئۆفەر",
+    "categoriesTitle": "گەڕان بە پێی پۆل",
+    "categoryTabs": { "events": "چالاکی", "restaurants": "چێشتخانە", "cafes": "کافێ", "hotels": "هوتێل", "experiences": "ئەزموون", "deals": "ئۆفەر" }
+  },
+  "cityPage": {
+    "searchInCity": "لە ناو ئەم شارە بگەڕێ",
+    "tabs": { "all": "هەموو", "events": "چالاکی", "restaurantsAndCafes": "چێشتخانە و کافێ", "hotels": "هوتێل", "experiences": "ئەزموون" }
+  },
+  "directory": {
+    "title": "ڕێنمایی کاروبار",
+    "searchPlaceholder": "لە لیستەکان و کاروبارەکان بگەڕێ",
+    "filterType": "فلتەر بە پێی جۆر",
+    "filterCity": "فلتەر بە پێی شار",
+    "filterPrice": "فلتەر بە پێی نرخ",
+    "filterRating": "فلتەر بە پێی هەڵسەنگاندن",
+    "sortBy": "ڕیزکردن"
+  },
+  "listing": { "related": "لیستی پەیوەندیدار", "openingHours": "کاتی کار", "eventTime": "بەروار و کات", "phone": "تەلەفۆن", "website": "وێبسایت" },
+  "searchPage": { "title": "گەڕان", "subtitle": "لە هەموو جۆرە لیستانەدا بگەڕێ" },
+  "about": { "title": "دەربارەی Iraq Compass", "body": "Iraq Compass پلاتفۆرمێکی بازرگانییە بۆ دۆزینەوەی شار، کاروبار، ئۆفەر و ئەزموونی ناوخۆیی لە هەموو پارێزگاکانی عێراق." },
+  "footer": { "linksTitle": "بەستەری خێرا", "copyright": "مافی بڵاوکردنەوە Iraq Compass 2026" },
+  "governorates": { "all": "هەموو پارێزگاکان", "baghdad": "بەغدا", "erbil": "هەولێر", "basra": "بەسرە", "slemani": "سلێمانی", "duhok": "دهۆک" },
+  "categories": { "food": "خواردن", "events": "چالاکی", "hotels": "هوتێل", "shopping": "کڕین", "tourism": "گەشتیاری", "business": "بازرگانی", "health": "تەندروستی", "transport": "گواستنەوە", "emergency": "فریاکەوتن" },
+  "subcategories": {}
+}

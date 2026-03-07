@@ -1,29 +1,37 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { usePageTitle } from './usePageTitle';
+import { apiService } from '../services/apiService';
+import { useAsyncData } from '../hooks/useAsyncData';
+import styles from './Page.module.css';
 
 const ProfilePage: React.FC = () => {
-  usePageTitle('Profile');
   const { user, updateProfile } = useAuth();
   const [name, setName] = useState(user?.name || '');
-
-  if (!user) return null;
+  const loadProfile = useCallback(() => apiService.getProfile(), []);
+  const { data, loading, error } = useAsyncData(loadProfile);
 
   return (
-    <main className="page-wrap stack">
-      <h1 className="page-title">Profile</h1>
-      <section className="card stack" style={{ maxWidth: 560 }}>
-        <div className="row">
-          <div style={{ width: 60, height: 60, borderRadius: '50%', background: '#0ea5e9', display: 'grid', placeItems: 'center', fontWeight: 700 }}>{user.avatar}</div>
-          <div>
-            <strong>{user.name}</strong>
-            <div className="muted">{user.email}</div>
-          </div>
-        </div>
-        <label className="stack">Display name<input className="input" value={name} onChange={(e) => setName(e.target.value)} /></label>
-        <button className="btn btn-primary" onClick={() => name.trim() && updateProfile(name.trim())}>Save profile</button>
-      </section>
-    </main>
+    <section className={styles.page}>
+      <h1>Profile</h1>
+      {loading && <p className={styles.loader}>Loading profile…</p>}
+      {error && <p className={styles.error}>Profile request failed: {error}</p>}
+      {data && (
+        <article className={styles.card}>
+          <p><strong>Name:</strong> {data.name}</p>
+          <p><strong>Email:</strong> {data.email}</p>
+          <p><strong>Role:</strong> {data.role}</p>
+          <p><strong>Location:</strong> {data.location}</p>
+        </article>
+      )}
+      <article className={styles.card}>
+        {/* Controlled input updates user context and keeps UI in sync for profile edits. */}
+        <label>
+          Display Name
+          <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} />
+        </label>
+        <button className={styles.button} style={{ marginTop: '0.75rem' }} onClick={() => updateProfile(name.trim())}>Save</button>
+      </article>
+    </section>
   );
 };
 

@@ -3,9 +3,10 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './Page.module.css';
 
-const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+const SignupPage: React.FC = () => {
+  const { register: signup } = useAuth();
   const navigate = useNavigate();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -14,17 +15,17 @@ const LoginPage: React.FC = () => {
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Basic client-side validation keeps invalid requests from hitting the API.
+    if (!name.trim()) return setError('Name is required');
     if (!email.trim()) return setError('Email is required');
     if (password.length < 6) return setError('Password must be at least 6 characters');
 
     try {
-      setError('');
       setSubmitting(true);
-      await login(email, password);
+      setError('');
+      await signup(name, email, password);
       navigate('/dashboard');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Login failed');
+      setError(requestError instanceof Error ? requestError.message : 'Signup failed');
     } finally {
       setSubmitting(false);
     }
@@ -32,8 +33,11 @@ const LoginPage: React.FC = () => {
 
   return (
     <section className={styles.page}>
-      <h1>Login</h1>
+      <h1>Signup</h1>
       <form className={styles.card} onSubmit={submit}>
+        <label>Name
+          <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} />
+        </label>
         <label>Email
           <input className={styles.input} value={email} onChange={(event) => setEmail(event.target.value)} />
         </label>
@@ -41,11 +45,11 @@ const LoginPage: React.FC = () => {
           <input type="password" className={styles.input} value={password} onChange={(event) => setPassword(event.target.value)} />
         </label>
         {error && <p className={styles.error}>{error}</p>}
-        <button className={styles.button} type="submit" disabled={submitting}>{submitting ? 'Signing in…' : 'Sign in'}</button>
+        <button className={styles.button} type="submit" disabled={submitting}>{submitting ? 'Creating…' : 'Create account'}</button>
       </form>
-      <p>Need an account? <NavLink to="/signup">Sign up</NavLink></p>
+      <p>Already have an account? <NavLink to="/login">Login</NavLink></p>
     </section>
   );
 };
 
-export default LoginPage;
+export default SignupPage;

@@ -1,102 +1,113 @@
-import { FormEvent, useMemo, useState } from 'react';
-import { APP_COPY, APP_NAME, UI_TEXT } from './constants';
-import type { CompassResponse } from './types';
-import { getCompassGuidance } from './services/geminiService';
-import { CompassHeader } from './components/CompassHeader';
-import { QueryForm } from './components/QueryForm';
-import { EmptyState } from './components/EmptyState';
-import { LoadingState } from './components/LoadingState';
-import { ErrorState } from './components/ErrorState';
-import { CompassResults } from './components/CompassResults';
+import React, { useState, useEffect, useRef } from 'react';
+import { Language } from './types';
+import Header from './components/Header';
+import HeroSlide from './components/HeroSlide';
+import FeaturedBusinessesSlide from './components/FeaturedBusinessesSlide';
+import CuratedEventsSlide from './components/CuratedEventsSlide';
+import DealsMarketplaceSlide from './components/DealsMarketplaceSlide';
+import BusinessDirectorySlide from './components/BusinessDirectorySlide';
+import CityNavigatorSlide from './components/CityNavigatorSlide';
+import AccessibilityHubSlide from './components/AccessibilityHubSlide';
+import { TRANSLATIONS } from './constants';
 
-const App = () => {
-  const [query, setQuery] = useState('');
-  const [result, setResult] = useState<CompassResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+const App: React.FC = () => {
+  const [language, setLanguage] = useState<Language>('en');
+  const [fontSize, setFontSize] = useState('base');
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const [selectedGovernorate, setSelectedGovernorate] = useState<string>('all');
 
-  const canSubmit = useMemo(() => query.trim().length > 0 && !isLoading, [query, isLoading]);
+  const [activeFilters, setActiveFilters] = useState({
+    searchTerm: '',
+    governorate: 'all',
+    category: 'all',
+    price: 'all',
+    rating: 'all',
+    sortBy: 'default'
+  });
+  const businessDirectoryRef = useRef<HTMLElement>(null);
 
-  const requestGuidance = async (nextQuery: string) => {
-    setIsLoading(true);
-    setErrorMessage(null);
-
-    try {
-      const response = await getCompassGuidance(nextQuery);
-      setResult(response);
-    } catch (error) {
-      const fallbackMessage = UI_TEXT.errorFallback;
-      setErrorMessage(error instanceof Error ? error.message : fallbackMessage);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleCategorySelect = (categoryId: string) => {
+    setActiveFilters(prev => ({ 
+      ...prev, 
+      category: categoryId,
+      // Reset search term for a clean slate on new category selection
+      // but keep the governorate filter
+      price: 'all',
+      rating: 'all',
+      searchTerm: ''
+    }));
+    businessDirectoryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const trimmedQuery = query.trim();
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === 'ar' || language === 'ku' ? 'rtl' : 'ltr';
+  }, [language]);
+  
+  useEffect(() => {
+    const sizeMap = {
+      sm: '14px',
+      base: '16px',
+      lg: '18px'
+    };
+    document.documentElement.style.fontSize = sizeMap[fontSize as keyof typeof sizeMap];
+    
+    document.documentElement.setAttribute('data-reduced-motion', String(reduceMotion));
+  }, [fontSize, reduceMotion]);
 
-    if (!trimmedQuery || isLoading) {
-      return;
+  // Sync global governorate filter with business directory filter
+  useEffect(() => {
+    if (selectedGovernorate !== activeFilters.governorate) {
+      setActiveFilters(prev => ({ ...prev, governorate: selectedGovernorate }));
     }
+  }, [selectedGovernorate, activeFilters.governorate]);
 
-    await requestGuidance(trimmedQuery);
-  };
+
+  const t = TRANSLATIONS[language];
 
   return (
-    <main className="app">
-      <div className="shell">
-        <CompassHeader title={APP_NAME} description={APP_COPY.subtitle} />
-
-        <section className="surface">
-          <QueryForm
-            query={query}
-            onQueryChange={setQuery}
-            onSubmit={handleSubmit}
-            isLoading={isLoading}
-            canSubmit={canSubmit}
-          />
-
-          {isLoading && <LoadingState />}
-
-          {!isLoading && errorMessage && (
-            <ErrorState message={errorMessage} onRetry={() => void requestGuidance(query.trim())} />
-          )}
-
-          {!isLoading && !errorMessage && !result && <EmptyState suggestions={APP_COPY.promptSuggestions} />}
-
-          {!isLoading && !errorMessage && result && <CompassResults response={result} />}
-        </section>
+    <div className="bg-[#0A0E27] text-white min-h-screen overflow-x-hidden">
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-[#6C2BD9]/30 to-transparent blur-3xl animate-glow-1"></div>
+        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-[#00D9FF]/20 to-transparent blur-3xl animate-glow-2"></div>
       </div>
-    </main>
+      
+      <div className="relative z-10">
+        <Header language={language} setLanguage={setLanguage} t={t} />
+
+        <main className="container mx-auto px-4 py-8 flex flex-col gap-16 md:gap-24">
+          <HeroSlide 
+            t={t} 
+            language={language} 
+            onCategorySelect={handleCategorySelect}
+            selectedGovernorate={selectedGovernorate}
+            onGovernorateChange={setSelectedGovernorate}
+          />
+          <FeaturedBusinessesSlide t={t} selectedGovernorate={selectedGovernorate} />
+          <CuratedEventsSlide t={t} />
+          <DealsMarketplaceSlide t={t} selectedGovernorate={selectedGovernorate} />
+          <BusinessDirectorySlide
+            ref={businessDirectoryRef}
+            t={t}
+            activeFilters={activeFilters}
+            setActiveFilters={setActiveFilters}
+          />
+          <CityNavigatorSlide t={t} />
+          <AccessibilityHubSlide
+            t={t}
+            fontSize={fontSize}
+            setFontSize={setFontSize}
+            reduceMotion={reduceMotion}
+            setReduceMotion={setReduceMotion}
+          />
+        </main>
+        
+        <footer className="text-center p-8 mt-16 border-t border-white/10 text-gray-400">
+          <p>&copy; 2024 Iraq Compass. All rights reserved.</p>
+        </footer>
+      </div>
+    </div>
   );
 };
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Layout from './src/components/Layout';
-import ProtectedRoute from './src/components/ProtectedRoute';
-import HomePage from './src/pages/HomePage';
-import AboutPage from './src/pages/AboutPage';
-import DashboardPage from './src/pages/DashboardPage';
-import ProfilePage from './src/pages/ProfilePage';
-import LoginPage from './src/pages/LoginPage';
-import SignupPage from './src/pages/SignupPage';
-import NotFoundPage from './src/pages/NotFoundPage';
-
-const withLayout = (node: React.ReactNode) => <Layout>{node}</Layout>;
-
-const App: React.FC = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={withLayout(<HomePage />)} />
-      <Route path="/about" element={withLayout(<AboutPage />)} />
-      <Route path="/dashboard" element={withLayout(<ProtectedRoute><DashboardPage /></ProtectedRoute>)} />
-      <Route path="/profile" element={withLayout(<ProtectedRoute><ProfilePage /></ProtectedRoute>)} />
-      <Route path="/login" element={withLayout(<LoginPage />)} />
-      <Route path="/signup" element={withLayout(<SignupPage />)} />
-      <Route path="*" element={withLayout(<NotFoundPage />)} />
-    </Routes>
-  </BrowserRouter>
-);
 
 export default App;

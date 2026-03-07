@@ -1,88 +1,20 @@
-# Iraq Compass
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-Iraq Compass is a Gemini-powered React + TypeScript app that helps users turn goals into practical, step-by-step roadmaps.
+# Run and deploy your AI Studio app
 
-## Features
+This contains everything you need to run your app locally.
 
-- Mobile-first landing screen with a clear prompt and CTA.
-- Structured results view with roadmap steps, tips, and markdown output.
-- Friendly empty, loading, and error states.
-- Typed Gemini service layer with fallback guidance when API key is missing.
+View your app in AI Studio: https://ai.studio/apps/5c5d9957-94e7-4676-8632-f39ea4083651
 
-## Tech Stack
+## Run Locally
 
-- Vite
-- React 19 + TypeScript
-- Gemini API via `@google/genai`
+**Prerequisites:**  Node.js
 
-## Local Development
-# Absuuuun Frontend
-
-A React + TypeScript + Vite frontend with route-based pages, protected areas, API integration with mock fallback, and unit tests.
-
-## Features implemented
-
-- Main routes: Home, About, Dashboard, Profile, Login, Signup, and 404 fallback.
-- Shared layout with responsive top navigation and footer.
-- CSS Modules used consistently for responsive styling.
-- API integration through `src/services/apiService.ts` with `fetch` and local mock fallback.
-- Login/Signup validation with `react-hook-form`.
-- Loading and error states on data-driven pages.
-- Unit tests using Jest + React Testing Library.
-- Deployment config for both Vercel and Netlify.
-
-## Assumptions
-
-- API base URL is optionally provided through `VITE_API_BASE_URL`.
-- Expected API endpoints (if backend exists):
-  - `GET /api/features`
-  - `GET /api/about`
-  - `GET /api/dashboard`
-  - `GET /api/profile`
-  - `POST /api/login`
-  - `POST /api/signup`
-- If endpoints are unavailable, the app falls back to mock data so it remains fully usable.
-- Authentication is session-like and stored in localStorage for demo usage.
-
-## Run locally
 
 1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Add your Gemini key to `.env.local`:
-   ```bash
-   API_KEY=your_gemini_api_key
-2. (Optional) configure API URL in `.env.local`:
-   ```bash
-   VITE_API_BASE_URL=http://localhost:4000
-   ```
-3. Start development server:
-   ```bash
-   npm run dev
-   ```
-4. Build for production:
-   ```bash
-   npm run build
-   ```
-
-## Tests
-
-```bash
-npm run test
-```
-
-## Production build
-
-```bash
-npm run build
-npm run preview
-```
-
-## Deployment
-
-### Vercel
-- `vercel.json` is included for SPA routing and static build output.
-
-### Netlify
-- `netlify.toml` is included with build command and SPA redirect.
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

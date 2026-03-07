@@ -1,39 +1,56 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Bell, Home, MessageCircle, Rss, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-const navItems = [
-  { to: '/', label: 'Home', Icon: Home },
+const authedItems = [
   { to: '/feed', label: 'Feed', Icon: Rss },
   { to: '/messages', label: 'Messages', Icon: MessageCircle },
-  { to: '/notifications', label: 'Notifications', Icon: Bell },
+  { to: '/notifications', label: 'Alerts', Icon: Bell },
   { to: '/profile', label: 'Profile', Icon: User },
 ];
 
-const baseLink = 'px-3 py-2 rounded-lg text-sm transition focus:outline-none focus:ring-2 focus:ring-sky-400';
-
 const MainNav: React.FC = () => {
+  const { user } = useAuth();
+
   return (
     <>
-      <nav className="hidden md:flex sticky top-0 z-40 bg-slate-900/90 backdrop-blur border-b border-slate-700 p-3 gap-2 justify-center">
-        {navItems.map(({ to, label }) => (
-          <NavLink key={to} to={to} className={({ isActive }) => `${baseLink} ${isActive ? 'bg-sky-500 text-white' : 'text-slate-300 hover:bg-slate-800'}`}>
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-700 px-2 py-1">
-        <ul className="grid grid-cols-5">
-          {navItems.map(({ to, label, Icon }) => (
-            <li key={to}>
-              <NavLink to={to} className={({ isActive }) => `flex flex-col items-center py-2 rounded-md text-xs ${isActive ? 'text-sky-400' : 'text-slate-300 hover:text-white'}`}>
-                <Icon className="w-5 h-5" />
-                <span>{label}</span>
+      <header className="main-nav">
+        <div className="main-nav__inner">
+          <NavLink to="/" className="brand">Absuuuun • Iraq Compass</NavLink>
+          <nav className="nav-links">
+            <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Home</NavLink>
+            {authedItems.map((item) => (
+              <NavLink key={item.to} to={item.to} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                {item.label}
               </NavLink>
-            </li>
+            ))}
+            <NavLink to="/settings" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Settings</NavLink>
+          </nav>
+
+          <div className="nav-actions">
+            {user ? (
+              <NavLink to="/profile" className="btn btn-ghost">{user.avatar} {user.name}</NavLink>
+            ) : (
+              <>
+                <NavLink to="/login" className="btn btn-ghost">Login</NavLink>
+                <NavLink to="/register" className="btn btn-primary">Get started</NavLink>
+              </>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <nav className="mobile-nav" aria-label="Primary">
+        <div className="mobile-nav__grid">
+          <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}><Home width={19} height={19} style={{ margin: '0 auto 2px' }} />Home</NavLink>
+          {authedItems.map(({ to, label, Icon }) => (
+            <NavLink key={to} to={to} className={({ isActive }) => isActive ? 'active' : ''}>
+              <Icon width={19} height={19} style={{ margin: '0 auto 2px' }} />
+              {label}
+            </NavLink>
           ))}
-        </ul>
+        </div>
       </nav>
     </>
   );

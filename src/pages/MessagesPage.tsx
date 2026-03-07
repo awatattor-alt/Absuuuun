@@ -6,16 +6,16 @@ import { usePageTitle } from './usePageTitle';
 const MessagesPage: React.FC = () => {
   usePageTitle('Messages');
   return (
-    <section className="p-4 md:p-8 pb-24 md:pb-8 space-y-3">
-      <h1 className="text-2xl font-bold text-white">Messages</h1>
+    <main className="page-wrap stack">
+      <h1 className="page-title">Messages</h1>
       {MESSAGE_THREADS.map((thread) => (
-        <NavLink key={thread.id} to={`/messages/${thread.id}`} className="block bg-slate-800 border border-slate-700 rounded-xl p-4 hover:bg-slate-700 focus:ring-2 focus:ring-sky-400">
-          <p className="text-white font-medium">{thread.name}</p>
-          <p className="text-sm text-slate-300">{thread.preview}</p>
-          <p className="text-xs text-slate-400 mt-1">{thread.updatedAt}</p>
+        <NavLink key={thread.id} to={`/messages/${thread.id}`} className="card stack">
+          <strong>{thread.name}</strong>
+          <span className="muted">{thread.preview}</span>
+          <small className="muted">{thread.updatedAt}</small>
         </NavLink>
       ))}
-    </section>
+    </main>
   );
 };
 

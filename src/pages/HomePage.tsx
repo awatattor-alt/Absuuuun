@@ -1,38 +1,63 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { HOME_EVENTS } from '../data/socialData';
 import { askGemini } from '../services/geminiService';
+import { useAuth } from '../context/AuthContext';
 import { usePageTitle } from './usePageTitle';
 
 const HomePage: React.FC = () => {
   usePageTitle('Home');
+  const { user } = useAuth();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const handleAsk = async (eventId: string, title: string) => {
     setLoadingId(eventId);
-    const response = await askGemini(`Tell me something interesting about this event: ${title}`);
+    const response = await askGemini(`Write one travel tip and one cultural fact about ${title} in Iraq.`);
     setAnswers((prev) => ({ ...prev, [eventId]: response }));
     setLoadingId(null);
   };
 
   return (
-    <section className="p-4 md:p-8 space-y-4 pb-24 md:pb-8">
-      <h1 className="text-2xl font-bold text-white">Discover Iraq</h1>
-      <p className="text-slate-300">Curated events from Iraqi cities.</p>
-      <div className="grid md:grid-cols-3 gap-4">
-        {HOME_EVENTS.map((event) => (
-          <article key={event.id} className="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-3">
-            <h2 className="font-semibold text-lg text-white">{event.title}</h2>
-            <p className="text-sm text-slate-300">{event.city} • {event.date}</p>
-            <p className="text-slate-200">{event.description}</p>
-            <button onClick={() => handleAsk(event.id, event.title)} className="px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 focus:ring-2 focus:ring-sky-400">
-              {loadingId === event.id ? 'Thinking…' : 'Ask AI about this event'}
-            </button>
-            {answers[event.id] && <p className="text-sm bg-slate-900 rounded-lg p-3 text-slate-200">{answers[event.id]}</p>}
-          </article>
-        ))}
-      </div>
-    </section>
+    <main className="page-wrap stack">
+      <section className="hero hero-grid">
+        <div className="stack">
+          <h1 className="page-title">Discover modern Iraq with local stories, events, and communities.</h1>
+          <p className="muted">Absuuuun helps you explore cities, follow creators, and connect with people around events happening this week.</p>
+          <div className="row">
+            <NavLink to={user ? '/feed' : '/register'} className="btn btn-primary">{user ? 'Open your feed' : 'Create free account'}</NavLink>
+            <NavLink to={user ? '/messages' : '/login'} className="btn btn-ghost">{user ? 'See messages' : 'Login'}</NavLink>
+          </div>
+        </div>
+        <div className="card stack">
+          <strong>What you can do</strong>
+          <span className="muted">• Follow place-based updates from Baghdad, Basra, Erbil and more.</span>
+          <span className="muted">• Chat with your groups and discover curated recommendations.</span>
+          <span className="muted">• Use AI helpers to learn quick facts about events.</span>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="page-title">Upcoming highlights</h2>
+        <p className="page-subtitle">Hand-picked events from local communities.</p>
+        <div className="grid-3">
+          {HOME_EVENTS.map((event) => (
+            <article key={event.id} className="card stack">
+              <div className="between">
+                <strong>{event.title}</strong>
+                <small className="muted">{event.date}</small>
+              </div>
+              <small className="muted">{event.city}</small>
+              <p style={{ margin: 0 }}>{event.description}</p>
+              <button onClick={() => handleAsk(event.id, event.title)} className="btn btn-ghost">
+                {loadingId === event.id ? 'Thinking…' : 'Ask AI for tips'}
+              </button>
+              {answers[event.id] && <p className="muted" style={{ margin: 0 }}>{answers[event.id]}</p>}
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 };
 

@@ -14,27 +14,30 @@ const RegisterPage: React.FC = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !password.trim()) {
-      setError('All fields are required.');
-      return;
-    }
+    if (!name.trim() || !email.trim() || !password.trim()) return setError('All fields are required.');
     setError('');
     await register(name, email, password);
     navigate('/feed');
   };
 
   return (
-    <div className="min-h-[70vh] grid place-items-center p-4">
-      <form onSubmit={submit} className="w-full max-w-sm bg-slate-800 rounded-xl p-5 border border-slate-700 space-y-3">
-        <h1 className="text-xl text-white font-bold">Register</h1>
-        <input className="w-full p-2 rounded bg-slate-900 text-white border border-slate-600 focus:ring-2 focus:ring-sky-400" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-        <input className="w-full p-2 rounded bg-slate-900 text-white border border-slate-600 focus:ring-2 focus:ring-sky-400" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input className="w-full p-2 rounded bg-slate-900 text-white border border-slate-600 focus:ring-2 focus:ring-sky-400" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        {error && <p className="text-red-400 text-sm">{error}</p>}
-        <button className="w-full py-2 rounded bg-sky-600 hover:bg-sky-500">Create account</button>
-        <p className="text-sm text-slate-300">Already have account? <NavLink className="text-sky-400 hover:underline" to="/login">Login</NavLink></p>
-      </form>
-    </div>
+    <main className="form-shell">
+      <section className="card auth-card">
+        <aside className="auth-aside stack">
+          <h1 className="page-title">Join Absuuuun</h1>
+          <p className="muted">Build your profile, discover events, and connect with local explorers in Iraq.</p>
+        </aside>
+        <form className="auth-main stack" onSubmit={submit}>
+          <h2 style={{ margin: 0 }}>Create account</h2>
+          <input className="input" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input className="input" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="input" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          {error && <small style={{ color: '#fca5a5' }}>{error}</small>}
+          <button className="btn btn-primary" type="submit">Create account</button>
+          <small className="muted">Already registered? <NavLink to="/login" style={{ color: 'var(--primary)' }}>Login</NavLink></small>
+        </form>
+      </section>
+    </main>
   );
 };
 

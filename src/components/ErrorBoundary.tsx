@@ -11,12 +11,12 @@ export const ErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ childre
 
   if (hasError) {
     return (
-      <div className="min-h-screen grid place-items-center bg-slate-950 text-white p-6">
-        <div className="max-w-md text-center space-y-3">
-          <h1 className="text-2xl font-bold">Something went wrong</h1>
-          <p className="text-slate-300">Please refresh the page and try again.</p>
-        </div>
-      </div>
+      <main className="form-shell">
+        <section className="card stack" style={{ textAlign: 'center', maxWidth: 520 }}>
+          <h1 style={{ margin: 0 }}>Something went wrong</h1>
+          <p className="muted">Please refresh the page and try again.</p>
+        </section>
+      </main>
     );
   }
 

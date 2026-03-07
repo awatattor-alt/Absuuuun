@@ -16,7 +16,7 @@ import NotFoundPage from './src/pages/NotFoundPage';
 
 const App: React.FC = () => (
   <BrowserRouter>
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="app-shell">
       <MainNav />
       <ErrorBoundary>
         <Routes>

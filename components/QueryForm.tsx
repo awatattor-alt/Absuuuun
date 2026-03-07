@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, KeyboardEvent } from 'react';
 import { APP_CONTENT, EXAMPLE_QUERIES } from '../constants';
 
 interface QueryFormProps {
@@ -14,12 +14,20 @@ export default function QueryForm({ query, onQueryChange, onSubmit, isLoading }:
     onSubmit();
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+      event.preventDefault();
+      onSubmit();
+    }
+  };
+
   return (
     <section className="query-card">
       <form onSubmit={handleSubmit}>
         <textarea
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder={APP_CONTENT.placeholder}
           rows={5}
           aria-label="Ask Iraq Compass"

@@ -14,13 +14,20 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const submitQuery = async () => {
+  const submitQuery = async (nextQuery = query) => {
+    const trimmedQuery = nextQuery.trim();
+    if (!trimmedQuery) {
+      return;
+    }
+
     setIsLoading(true);
     setError('');
+    setResult(null);
 
     try {
-      const guidance = await getCompassGuidance(query);
+      const guidance = await getCompassGuidance(trimmedQuery);
       setResult(guidance);
+      setQuery(trimmedQuery);
     } catch (submitError) {
       setResult(null);
       const message = submitError instanceof Error ? submitError.message : 'Unknown error.';
@@ -30,16 +37,26 @@ export default function App() {
     }
   };
 
+  const handleSuggestionSelect = (suggestion: string) => {
+    setQuery(suggestion);
+    void submitQuery(suggestion);
+  };
+
+  const resetState = () => {
+    setResult(null);
+    setError('');
+  };
+
   return (
-    <div className="app-shell">
+    <div className="app">
       <main className="app-container">
         <CompassHeader />
-        <QueryForm query={query} onQueryChange={setQuery} onSubmit={submitQuery} isLoading={isLoading} />
+        <QueryForm query={query} onQueryChange={setQuery} onSubmit={() => void submitQuery()} isLoading={isLoading} />
 
         {isLoading && <LoadingState />}
         {!isLoading && error && <ErrorState message={error} />}
-        {!isLoading && !error && !result && <EmptyState />}
-        {!isLoading && !error && result && <CompassResults result={result} />}
+        {!isLoading && !error && !result && <EmptyState onSelect={handleSuggestionSelect} />}
+        {!isLoading && !error && result && <CompassResults result={result} onReset={resetState} />}
       </main>
     </div>
   );

@@ -1,9 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap');
 
 :root {
-  font-family: 'Inter', sans-serif;
-  color: #0f172a;
-  background-color: #f9fafb;
+  --bg: #0d0a06;
+  --surface: #17120b;
+  --surface-soft: #1e170e;
+  --text: #f7efe2;
+  --muted: #c8b79a;
+  --accent: #c9962b;
+  --accent-soft: rgba(201, 150, 43, 0.2);
+  --border: rgba(201, 150, 43, 0.45);
 }
 
 * {
@@ -12,72 +17,95 @@
 
 body {
   margin: 0;
-  background: #f9fafb;
+  background: radial-gradient(circle at top, #21180e 0%, var(--bg) 45%);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
 }
 
-.app-shell {
+h1,
+h2,
+h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--accent);
+}
+
+.app {
   min-height: 100vh;
-  padding: 0 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 1rem 2.5rem;
 }
 
 .app-container {
+  width: 100%;
   max-width: 720px;
-  margin: 0 auto;
 }
 
 .compass-header {
   text-align: center;
-  padding: 4rem 0 2rem;
+  padding: 3.5rem 0 1.75rem;
 }
 
 .compass-header h1 {
   margin: 0;
-  font-size: clamp(2rem, 4vw, 2.5rem);
-  font-weight: 700;
+  font-size: clamp(2.1rem, 5vw, 2.9rem);
 }
 
 .compass-header p {
-  margin: 0.75rem auto 0;
-  color: #64748b;
-  max-width: 62ch;
+  margin: 0.9rem auto 0;
+  color: var(--muted);
+  max-width: 60ch;
 }
 
 .query-card,
 .result-card,
 .state-panel {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  background: linear-gradient(160deg, var(--surface) 0%, var(--surface-soft) 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
 }
 
 .query-card {
   padding: 1rem;
 }
 
-.query-card textarea {
+textarea {
   width: 100%;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.95rem;
   resize: vertical;
+  font: inherit;
+  background: #110d08;
+  color: var(--text);
+}
+
+textarea:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button {
   font: inherit;
 }
 
-.query-card button[type='submit'] {
-  margin-top: 0.75rem;
+.query-card button[type='submit'],
+.reset-button {
+  margin-top: 0.85rem;
   width: 100%;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #0ea5e9, #2563eb);
-  color: white;
-  font: inherit;
-  font-weight: 600;
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #c9962b 0%, #a97a1e 100%);
+  color: #201409;
+  font-weight: 700;
   padding: 0.8rem 1rem;
   cursor: pointer;
 }
 
-.query-card button[disabled] {
-  opacity: 0.65;
+button[disabled] {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -85,33 +113,40 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.75rem;
+  margin-top: 0.9rem;
 }
 
 .examples button {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: #f8fafc;
-  color: #1e293b;
-  padding: 0.4rem 0.65rem;
-  font-size: 0.875rem;
+  background: rgba(13, 10, 6, 0.7);
+  color: var(--text);
+  padding: 0.42rem 0.72rem;
+  font-size: 0.86rem;
   cursor: pointer;
+  transition: all 160ms ease;
+}
+
+.examples button:hover,
+.examples button.chip-interactive:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
 }
 
 .state-panel {
   text-align: center;
-  padding: 1.6rem;
+  padding: 1.5rem;
   margin-top: 1rem;
 }
 
-.error-state h2 {
-  color: #b91c1c;
+.state-panel p {
+  color: var(--muted);
 }
 
 .results {
   margin-top: 1rem;
   display: grid;
-  gap: 0.75rem;
+  gap: 0.8rem;
 }
 
 .result-card {
@@ -124,32 +159,73 @@ body {
   margin: 0;
 }
 
-.result-card h2,
-.result-card h3 {
-  color: #0f172a;
-}
-
 .result-card p {
   margin-top: 0.5rem;
-  color: #334155;
+  color: #eadcc7;
   line-height: 1.6;
 }
 
 .step-label {
-  color: #2563eb;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
 .action {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.55rem;
   font-weight: 500;
 }
 
-@media (max-width: 640px) {
+.fade-in {
+  animation: fadeIn 420ms ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 1rem 0.75rem 2rem;
+  }
+
   .compass-header {
-    padding-top: 2.5rem;
+    padding-top: 2.2rem;
+  }
+
+  .compass-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .query-card,
+  .state-panel,
+  .result-card {
+    border-radius: 14px;
+  }
+
+  .query-card {
+    padding: 0.85rem;
+  }
+
+  textarea {
+    min-height: 130px;
+  }
+
+  .examples {
+    gap: 0.4rem;
+  }
+
+  .examples button {
+    width: 100%;
+    text-align: left;
   }
 }

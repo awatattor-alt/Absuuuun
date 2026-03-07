@@ -33,5 +33,10 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "baseUrl": "."
-  }
+  },
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/test"
+  ]
 }

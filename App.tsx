@@ -1,46 +1,99 @@
-import { useState } from 'react';
-import CompassHeader from './components/CompassHeader';
-import QueryForm from './components/QueryForm';
-import CompassResults from './components/CompassResults';
-import EmptyState from './components/EmptyState';
-import LoadingState from './components/LoadingState';
-import ErrorState from './components/ErrorState';
-import { CompassResponse } from './types';
-import { getCompassGuidance } from './services/geminiService';
+import { useMemo, useState } from 'react';
+import HomeView from './components/views/HomeView';
+import ComposeView from './components/views/ComposeView';
+import Sidebar from './components/Sidebar';
+import BottomBar from './components/BottomBar';
+import LoginModal from './components/LoginModal';
+import { addMockPost } from './constants';
+import { FeedItem, Language, User } from './types';
+import { t } from './translations';
 
 export default function App() {
-  const [query, setQuery] = useState('');
-  const [result, setResult] = useState<CompassResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentView, setCurrentView] = useState('home');
+  const [language, setLanguage] = useState<Language>('en');
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [toast, setToast] = useState('');
 
-  const submitQuery = async () => {
-    setIsLoading(true);
-    setError('');
+  const labels = useMemo(() => t(language), [language]);
 
-    try {
-      const guidance = await getCompassGuidance(query);
-      setResult(guidance);
-    } catch (submitError) {
-      setResult(null);
-      const message = submitError instanceof Error ? submitError.message : 'Unknown error.';
-      setError(message);
-    } finally {
-      setIsLoading(false);
-    }
+  const showToast = (message: string) => {
+    setToast(message);
+    window.setTimeout(() => setToast(''), 3000);
+  };
+
+  const onRequestLogin = () => {
+    if (currentUser) return;
+    setIsLoginOpen(true);
+  };
+
+  const onPost = (content: string) => {
+    if (!currentUser) return;
+    const post: FeedItem = {
+      id: `p-${Date.now()}`,
+      type: 'post',
+      author: currentUser,
+      content,
+      createdAt: 'now',
+      likes: 0,
+      comments: 0,
+      shares: 0,
+    };
+    addMockPost(post);
+    showToast(labels.successPost);
+    setCurrentView('home');
   };
 
   return (
-    <div className="app-shell">
-      <main className="app-container">
-        <CompassHeader />
-        <QueryForm query={query} onQueryChange={setQuery} onSubmit={submitQuery} isLoading={isLoading} />
+    <div className="min-h-screen bg-slate-50 pb-16 md:pb-0">
+      <div className="max-w-6xl mx-auto flex">
+        <Sidebar currentView={currentView} onNavigate={setCurrentView} />
+        <main className="flex-1 p-4 space-y-4">
+          <div className="flex justify-between items-center">
+            <h1 className="text-xl font-bold text-slate-900">Let's Do Tonight</h1>
+            <div className="flex gap-2">
+              <select value={language} onChange={(e) => setLanguage(e.target.value as Language)} className="border rounded-lg px-2 py-1 text-sm">
+                <option value="en">EN</option>
+                <option value="ku">KU</option>
+                <option value="ar">AR</option>
+              </select>
+              {currentUser ? (
+                <button className="text-sm border rounded-lg px-3" onClick={() => { setCurrentUser(null); showToast(labels.logoutSuccess); }}>Logout</button>
+              ) : null}
+            </div>
+          </div>
 
-        {isLoading && <LoadingState />}
-        {!isLoading && error && <ErrorState message={error} />}
-        {!isLoading && !error && !result && <EmptyState />}
-        {!isLoading && !error && result && <CompassResults result={result} />}
-      </main>
+          {currentView === 'home' && (
+            <HomeView currentUser={currentUser} language={language} onRequestLogin={onRequestLogin} onNavigate={setCurrentView} />
+          )}
+          {currentView === 'compose' && (
+            <ComposeView
+              currentUser={currentUser}
+              language={language}
+              onRequestLogin={() => {
+                setCurrentView('home');
+                onRequestLogin();
+              }}
+              onPost={onPost}
+              onCreateEvent={() => {}}
+              onCreateReel={() => {}}
+            />
+          )}
+        </main>
+      </div>
+
+      <BottomBar currentView={currentView} onNavigate={setCurrentView} />
+
+      <LoginModal
+        open={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onLogin={(user) => {
+          setCurrentUser(user);
+          showToast(labels.loginSuccess);
+        }}
+      />
+
+      {toast && <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">{toast}</div>}
     </div>
   );
 }

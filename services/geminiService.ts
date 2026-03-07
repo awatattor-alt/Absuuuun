@@ -1,71 +1,74 @@
+import { GoogleGenAI, Type } from '@google/genai';
+import { CompassResponse } from '../types';
 
-import { GoogleGenAI, Type } from "@google/genai";
-import { Event } from '../types';
+const apiKey =
+  import.meta.env.VITE_GEMINI_API_KEY ||
+  import.meta.env.GEMINI_API_KEY ||
+  process.env.GEMINI_API_KEY ||
+  process.env.API_KEY;
 
-if (!process.env.API_KEY) {
-  console.warn("API_KEY environment variable not set. Using a mock implementation.");
-}
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
-
-const eventSchema = {
-  type: Type.OBJECT,
-  properties: {
-    eventName: {
-      type: Type.STRING,
-      description: "The creative and engaging name of the event.",
+const fallbackResponse = (query: string): CompassResponse => ({
+  summary: `Here is a starter plan for: ${query}`,
+  steps: [
+    {
+      title: 'Clarify your goal',
+      explanation: 'Write down exactly what you need and your city so local rules are easier to match.',
+      action: 'Create a short checklist with timeline, budget, and location.',
     },
-    description: {
-      type: Type.STRING,
-      description: "A short, enticing description of the event (max 2 sentences).",
+    {
+      title: 'Collect verified local sources',
+      explanation: 'Use official ministry/government pages and known local providers before social media posts.',
+      action: 'Cross-check at least 2 trusted sources and save phone numbers.',
     },
-    city: {
-      type: Type.STRING,
-      description: "The Iraqi or Kurdish city where the event takes place (e.g., Baghdad, Erbil, Basra).",
+    {
+      title: 'Take the first practical step',
+      explanation: 'Start with the easiest high-impact action to build momentum.',
+      action: 'Book one appointment or submit one required form today.',
     },
-    suggestedDate: {
-      type: Type.STRING,
-      description: "A suggested date for the event, like 'Late July' or 'Mid-August 2024'.",
-    },
-  },
-  required: ["eventName", "description", "city", "suggestedDate"],
-};
+  ],
+  safetyNote:
+    'AI output may be incomplete or outdated. Confirm legal, medical, and safety details with official local authorities.',
+});
 
-const mockEvent: Event = {
-    eventName: "Tigris River Night Market",
-    description: "Experience a vibrant market along the Tigris with local crafts, food stalls, and live traditional music.",
-    city: "Baghdad",
-    suggestedDate: "Every Thursday Evening"
-};
-
-export const generateCuratedEvents = async (): Promise<Event[]> => {
-  if (!process.env.API_KEY) {
-    // Return mock data if API key is not available
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(Array(6).fill(mockEvent).map((e, i) => ({...e, eventName: `${e.eventName} #${i+1}`})));
-        }, 1500);
-    });
+export async function getCompassGuidance(query: string): Promise<CompassResponse> {
+  if (!query.trim()) {
+    throw new Error('Please enter a question.');
   }
 
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: "Generate a list of 6 diverse and creative fictional event ideas that could take place in various cities across Iraq and the Kurdistan region. Include events related to art, music, food, and technology.",
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.ARRAY,
-          items: eventSchema,
+  if (!ai) {
+    return fallbackResponse(query);
+  }
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents: `You are Iraq Compass, a practical assistant for people in Iraq. Return concise, actionable local guidance for this user query: ${query}`,
+    config: {
+      responseMimeType: 'application/json',
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          summary: { type: Type.STRING },
+          steps: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                title: { type: Type.STRING },
+                explanation: { type: Type.STRING },
+                action: { type: Type.STRING },
+              },
+              required: ['title', 'explanation', 'action'],
+            },
+          },
+          safetyNote: { type: Type.STRING },
         },
+        required: ['summary', 'steps', 'safetyNote'],
       },
-    });
+    },
+  });
 
-    const jsonText = response.text.trim();
-    const events: Event[] = JSON.parse(jsonText);
-    return events;
-  } catch (error) {
-    console.error("Error generating curated events:", error);
-    throw new Error("Failed to generate events from AI.");
-  }
-};
+  const parsed = JSON.parse(response.text) as CompassResponse;
+  return parsed;
+}

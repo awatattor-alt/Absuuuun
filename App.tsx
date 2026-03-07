@@ -1,113 +1,71 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Language } from './types';
-import Header from './components/Header';
-import HeroSlide from './components/HeroSlide';
-import FeaturedBusinessesSlide from './components/FeaturedBusinessesSlide';
-import CuratedEventsSlide from './components/CuratedEventsSlide';
-import DealsMarketplaceSlide from './components/DealsMarketplaceSlide';
-import BusinessDirectorySlide from './components/BusinessDirectorySlide';
-import CityNavigatorSlide from './components/CityNavigatorSlide';
-import AccessibilityHubSlide from './components/AccessibilityHubSlide';
-import { TRANSLATIONS } from './constants';
+import React, { useState, useEffect } from 'react';
+import { Screen, Lang, City, CategoryId } from './types';
+import { HomeScreen } from './components/HomeScreen';
+import { CategoryScreen } from './components/CategoryScreen';
+import { BusinessDetail } from './components/BusinessDetail';
 
-const App: React.FC = () => {
-  const [language, setLanguage] = useState<Language>('en');
-  const [fontSize, setFontSize] = useState('base');
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const [selectedGovernorate, setSelectedGovernorate] = useState<string>('all');
+function App() {
+  const [screen, setScreen] = useState<Screen>({ view: 'home' });
+  const [lang, setLang] = useState<Lang>('en');
+  const [city, setCity] = useState<City>('Sulaymaniyah');
 
-  const [activeFilters, setActiveFilters] = useState({
-    searchTerm: '',
-    governorate: 'all',
-    category: 'all',
-    price: 'all',
-    rating: 'all',
-    sortBy: 'default'
-  });
-  const businessDirectoryRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+  }, [lang]);
 
-  const handleCategorySelect = (categoryId: string) => {
-    setActiveFilters(prev => ({ 
-      ...prev, 
-      category: categoryId,
-      // Reset search term for a clean slate on new category selection
-      // but keep the governorate filter
-      price: 'all',
-      rating: 'all',
-      searchTerm: ''
-    }));
-    businessDirectoryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const handleNavigate = (view: 'home' | 'category' | 'business', id?: string) => {
+    if (view === 'home') {
+      setScreen({ view: 'home' });
+    } else if (view === 'category' && id) {
+      setScreen({ view: 'category', categoryId: id as CategoryId });
+    } else if (view === 'business' && id) {
+      setScreen({ view: 'business', businessId: id });
+    }
   };
 
-  useEffect(() => {
-    document.documentElement.lang = language;
-    document.documentElement.dir = language === 'ar' || language === 'ku' ? 'rtl' : 'ltr';
-  }, [language]);
-  
-  useEffect(() => {
-    const sizeMap = {
-      sm: '14px',
-      base: '16px',
-      lg: '18px'
-    };
-    document.documentElement.style.fontSize = sizeMap[fontSize as keyof typeof sizeMap];
-    
-    document.documentElement.setAttribute('data-reduced-motion', String(reduceMotion));
-  }, [fontSize, reduceMotion]);
-
-  // Sync global governorate filter with business directory filter
-  useEffect(() => {
-    if (selectedGovernorate !== activeFilters.governorate) {
-      setActiveFilters(prev => ({ ...prev, governorate: selectedGovernorate }));
-    }
-  }, [selectedGovernorate, activeFilters.governorate]);
-
-
-  const t = TRANSLATIONS[language];
+  const toggleLang = () => {
+    setLang(prev => prev === 'en' ? 'ar' : 'en');
+  };
 
   return (
-    <div className="bg-[#0A0E27] text-white min-h-screen overflow-x-hidden">
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-[#6C2BD9]/30 to-transparent blur-3xl animate-glow-1"></div>
-        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-[#00D9FF]/20 to-transparent blur-3xl animate-glow-2"></div>
-      </div>
-      
-      <div className="relative z-10">
-        <Header language={language} setLanguage={setLanguage} t={t} />
+    <div className="min-h-screen bg-stone-50 font-sans text-gray-900 mx-auto max-w-[448px] shadow-2xl relative overflow-hidden">
+      {/* Language Toggle */}
+      <button 
+        onClick={toggleLang}
+        className="absolute top-4 right-4 z-50 bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-sm hover:bg-white/30 transition-colors"
+      >
+        {lang === 'en' ? '🇮🇶 عربي' : '🌐 English'}
+      </button>
 
-        <main className="container mx-auto px-4 py-8 flex flex-col gap-16 md:gap-24">
-          <HeroSlide 
-            t={t} 
-            language={language} 
-            onCategorySelect={handleCategorySelect}
-            selectedGovernorate={selectedGovernorate}
-            onGovernorateChange={setSelectedGovernorate}
-          />
-          <FeaturedBusinessesSlide t={t} selectedGovernorate={selectedGovernorate} />
-          <CuratedEventsSlide t={t} />
-          <DealsMarketplaceSlide t={t} selectedGovernorate={selectedGovernorate} />
-          <BusinessDirectorySlide
-            ref={businessDirectoryRef}
-            t={t}
-            activeFilters={activeFilters}
-            setActiveFilters={setActiveFilters}
-          />
-          <CityNavigatorSlide t={t} />
-          <AccessibilityHubSlide
-            t={t}
-            fontSize={fontSize}
-            setFontSize={setFontSize}
-            reduceMotion={reduceMotion}
-            setReduceMotion={setReduceMotion}
-          />
-        </main>
-        
-        <footer className="text-center p-8 mt-16 border-t border-white/10 text-gray-400">
-          <p>&copy; 2024 Iraq Compass. All rights reserved.</p>
-        </footer>
-      </div>
+      {/* Screen Rendering */}
+      {screen.view === 'home' && (
+        <HomeScreen 
+          lang={lang} 
+          city={city} 
+          onCityChange={setCity} 
+          onNavigate={handleNavigate} 
+        />
+      )}
+      
+      {screen.view === 'category' && (
+        <CategoryScreen 
+          categoryId={screen.categoryId} 
+          city={city} 
+          lang={lang} 
+          onNavigate={handleNavigate} 
+        />
+      )}
+      
+      {screen.view === 'business' && (
+        <BusinessDetail 
+          businessId={screen.businessId} 
+          lang={lang} 
+          onNavigate={handleNavigate} 
+        />
+      )}
     </div>
   );
-};
+}
 
 export default App;

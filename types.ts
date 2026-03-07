@@ -30,5 +30,9 @@ export interface Business {
   created_at: string;
 }
 
-export type Screen = { view: 'home' } | { view: 'category'; categoryId: CategoryId } | { view: 'business'; businessId: string };
+export type Screen =
+  | { view: 'home' }
+  | { view: 'category'; categoryId: CategoryId }
+  | { view: 'business'; businessId: string };
+
 export type Lang = 'en' | 'ar';

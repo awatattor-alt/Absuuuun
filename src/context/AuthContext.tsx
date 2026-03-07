@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { apiService } from '../services/apiService';
 
 const STORAGE_KEY = 'absuuun_user';
 
@@ -6,6 +7,7 @@ type User = {
   name: string;
   email: string;
   avatar: string;
+  token?: string;
 };
 
 type AuthContextType = {
@@ -35,13 +37,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const login = async (email: string, _password: string) => {
-    const name = email.split('@')[0] || 'User';
-    persist({ name, email, avatar: name[0]?.toUpperCase() || 'U' });
+  const login = async (email: string, password: string) => {
+    const response = await apiService.login({ email, password });
+    const name = response.name || email.split('@')[0] || 'User';
+    persist({ name, email: response.email, avatar: name[0]?.toUpperCase() || 'U', token: response.token });
   };
 
-  const register = async (name: string, email: string, _password: string) => {
-    persist({ name, email, avatar: name[0]?.toUpperCase() || 'U' });
+  const register = async (name: string, email: string, password: string) => {
+    const response = await apiService.signup({ name, email, password });
+    const displayName = response.name || name;
+    persist({
+      name: displayName,
+      email: response.email,
+      avatar: displayName[0]?.toUpperCase() || 'U',
+      token: response.token,
+    });
   };
 
   const logout = () => persist(null);

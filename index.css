@@ -189,3 +189,10 @@ button:disabled {
     transform: translateY(0);
   }
 }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: #f8fafc;
+}
+a { color: #2563eb; }

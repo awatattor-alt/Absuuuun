@@ -2,7 +2,7 @@ import React, { useState, useMemo, forwardRef } from 'react';
 import type { TranslationSet, Business } from '../types';
 import { MOCK_BUSINESSES, CATEGORIES, GOVERNORATES } from '../constants';
 import GlassCard from './GlassCard';
-import { Search, MapPin, Grid, List, Star, DollarSign, ArrowUpDown } from './IconComponents';
+import { Search, MapPin, Grid, List, Star } from './IconComponents';
 
 type ActiveFilters = {
   searchTerm: string;
@@ -107,16 +107,16 @@ const BusinessDirectorySlide = forwardRef<HTMLElement, BusinessDirectorySlidePro
               />
             </div>
              <div className="bg-white/10 rounded-xl p-1.5 flex gap-1.5 self-start md:self-center border border-white/10">
-              <button onClick={() => setViewMode('grid')} aria-label="Grid View" className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'grid' ? 'bg-gradient-to-r from-[#6C2BD9] to-[#00D9FF] text-white shadow-lg' : 'text-gray-400 hover:bg-white/10 hover:text-white'}`}>
+              <button type="button" onClick={() => setViewMode('grid')} aria-label="Grid View" className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'grid' ? 'bg-gradient-to-r from-[#6C2BD9] to-[#00D9FF] text-white shadow-lg' : 'text-gray-400 hover:bg-white/10 hover:text-white'}`}>
                 <Grid className="w-5 h-5" />
               </button>
-              <button onClick={() => setViewMode('list')} aria-label="List View" className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'list' ? 'bg-gradient-to-r from-[#6C2BD9] to-[#00D9FF] text-white shadow-lg' : 'text-gray-400 hover:bg-white/10 hover:text-white'}`}>
+              <button type="button" onClick={() => setViewMode('list')} aria-label="List View" className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'list' ? 'bg-gradient-to-r from-[#6C2BD9] to-[#00D9FF] text-white shadow-lg' : 'text-gray-400 hover:bg-white/10 hover:text-white'}`}>
                 <List className="w-5 h-5" />
               </button>
             </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
             <select aria-label={t.businessDirectory.filterByGovernorate} value={activeFilters.governorate} onChange={(e) => handleFilterChange('governorate', e.target.value)} className={glassSelectStyle}>
                 {GOVERNORATES.map(gov => (
                     <option key={gov.id} value={gov.id} className="bg-[#0A0E27]">{t.governorates[gov.labelKey as keyof typeof t.governorates]}</option>
@@ -145,7 +145,7 @@ const BusinessDirectorySlide = forwardRef<HTMLElement, BusinessDirectorySlidePro
                 <option value="name-asc" className="bg-[#0A0E27]">{t.businessDirectory.sortNameAsc}</option>
                 <option value="rating-desc" className="bg-[#0A0E27]">{t.businessDirectory.sortRatingDesc}</option>
             </select>
-            <button onClick={handleReset} className="px-4 py-2 bg-white/10 border border-white/10 rounded-xl hover:bg-white/20 transition-all duration-300 h-full col-span-1 sm:col-span-2 lg:col-span-3 font-semibold text-sm">{t.businessDirectory.resetFilters}</button>
+            <button type="button" onClick={handleReset} className="px-4 py-2 bg-white/10 border border-white/10 rounded-xl hover:bg-white/20 transition-all duration-300 h-full col-span-1 sm:col-span-2 lg:col-span-1 font-semibold text-sm">{t.businessDirectory.resetFilters}</button>
         </div>
       </div>
 

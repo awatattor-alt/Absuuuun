@@ -27,11 +27,11 @@ const CityNavigatorSlide: React.FC<CityNavigatorSlideProps> = ({ t }) => {
                 </div>
                 <input
                     type="search"
-                    className="w-full p-4.5 ps-14 text-lg text-white bg-white/5 border border-white/20 rounded-full backdrop-blur-lg focus:ring-2 focus:ring-[#00D9FF] focus:outline-none placeholder:text-gray-400 transition-all duration-300 focus:bg-white/10"
+                    className="w-full px-5 py-4 ps-14 text-lg text-white bg-white/5 border border-white/20 rounded-full backdrop-blur-lg focus:ring-2 focus:ring-[#00D9FF] focus:outline-none placeholder:text-gray-400 transition-all duration-300 focus:bg-white/10"
                     placeholder={t.cityNavigator.searchPlaceholder}
                 />
             </div>
-            <button className="bg-gradient-to-r from-[#6C2BD9] to-[#00D9FF] text-white font-bold px-10 py-4 rounded-full hover:opacity-90 transition-all duration-300 flex-shrink-0 shadow-lg shadow-[#6C2BD9]/30 transform hover:scale-105">
+            <button type="button" className="bg-gradient-to-r from-[#6C2BD9] to-[#00D9FF] text-white font-bold px-10 py-4 rounded-full hover:opacity-90 transition-all duration-300 flex-shrink-0 shadow-lg shadow-[#6C2BD9]/30 transform hover:scale-105">
                 {t.cityNavigator.planJourneyButton}
             </button>
         </div>

@@ -1,11 +1,10 @@
 export interface CompassStep {
   title: string;
-  explanation: string;
-  action: string;
+  body: string;
 }
 
 export interface CompassResponse {
-  summary: string;
+  title: string;
   steps: CompassStep[];
-  safetyNote: string;
+  tips: string[];
 }

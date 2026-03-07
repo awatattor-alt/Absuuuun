@@ -1,10 +1,11 @@
-import { APP_CONTENT } from '../constants';
-
-export default function CompassHeader() {
-  return (
-    <header className="compass-header">
-      <h1>{APP_CONTENT.title}</h1>
-      <p>{APP_CONTENT.subtitle}</p>
-    </header>
-  );
+interface CompassHeaderProps {
+  title: string;
+  description: string;
 }
+
+export const CompassHeader = ({ title, description }: CompassHeaderProps) => (
+  <header className="compass-header">
+    <h1 className="compass-title">{title}</h1>
+    <p className="compass-subtitle">{description}</p>
+  </header>
+);

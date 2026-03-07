@@ -1,41 +1,39 @@
-import { FormEvent } from 'react';
-import { APP_CONTENT, EXAMPLE_QUERIES } from '../constants';
+import { FormEvent, KeyboardEvent } from 'react';
+import { UI_TEXT } from '../constants';
 
 interface QueryFormProps {
   query: string;
   onQueryChange: (query: string) => void;
-  onSubmit: () => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
+  canSubmit: boolean;
 }
 
-export default function QueryForm({ query, onQueryChange, onSubmit, isLoading }: QueryFormProps) {
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    onSubmit();
+export const QueryForm = ({ query, onQueryChange, onSubmit, isLoading, canSubmit }: QueryFormProps) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+      event.preventDefault();
+      event.currentTarget.form?.requestSubmit();
+    }
   };
 
   return (
-    <section className="query-card">
-      <form onSubmit={handleSubmit}>
-        <textarea
-          value={query}
-          onChange={(event) => onQueryChange(event.target.value)}
-          placeholder={APP_CONTENT.placeholder}
-          rows={5}
-          aria-label="Ask Iraq Compass"
-          disabled={isLoading}
-        />
-        <button type="submit" disabled={isLoading || !query.trim()}>
-          {isLoading ? APP_CONTENT.loadingLabel : APP_CONTENT.buttonLabel}
-        </button>
-      </form>
-      <div className="examples">
-        {EXAMPLE_QUERIES.map((example) => (
-          <button key={example} type="button" onClick={() => onQueryChange(example)} disabled={isLoading}>
-            {example}
-          </button>
-        ))}
-      </div>
-    </section>
+    <form className="query-card" onSubmit={onSubmit}>
+      <label htmlFor="goal-input" className="input-label">
+        {UI_TEXT.inputLabel}
+      </label>
+      <textarea
+        id="goal-input"
+        value={query}
+        onChange={(event) => onQueryChange(event.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder={UI_TEXT.inputPlaceholder}
+        rows={6}
+        disabled={isLoading}
+      />
+      <button type="submit" disabled={!canSubmit}>
+        {isLoading ? UI_TEXT.loading : UI_TEXT.submit}
+      </button>
+    </form>
   );
-}
+};

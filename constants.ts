@@ -1,15 +1,20 @@
-export const APP_CONTENT = {
-  title: 'Iraq Compass',
-  subtitle:
-    'Get practical, local guidance for daily life in Iraq using Gemini-powered recommendations.',
-  placeholder:
-    'Ask anything, e.g. “How do I register a small coffee shop in Baghdad?”',
-  buttonLabel: 'Get Guidance',
-  loadingLabel: 'Thinking through your request…',
+export const APP_NAME = 'Iraq Compass';
+
+export const APP_COPY = {
+  subtitle: 'Turn any goal into a clear, step-by-step roadmap.',
+  promptSuggestions: [
+    'How do I start a small business in Iraq?',
+    'Learn Arabic fluently in 6 months',
+    'Build a personal finance plan from scratch',
+    'Launch a freelance career as a developer',
+    'Improve my mental health and daily routine',
+  ],
 };
 
-export const EXAMPLE_QUERIES = [
-  'How can I find an English-speaking clinic in Erbil?',
-  'What are safe transport options from Baghdad airport at night?',
-  'How do I start a home catering business legally in Basra?',
-];
+export const UI_TEXT = {
+  inputLabel: "What's your goal or question?",
+  inputPlaceholder: 'e.g. I want to start a business in Baghdad, where do I begin?',
+  submit: 'Chart my path',
+  loading: 'Charting...',
+  errorFallback: 'Something went wrong. Please try again.',
+};

@@ -1,46 +1,85 @@
-import { useState } from 'react';
-import CompassHeader from './components/CompassHeader';
-import QueryForm from './components/QueryForm';
-import CompassResults from './components/CompassResults';
-import EmptyState from './components/EmptyState';
-import LoadingState from './components/LoadingState';
-import ErrorState from './components/ErrorState';
-import { CompassResponse } from './types';
+import { FormEvent, useMemo, useState } from 'react';
+import { APP_COPY, APP_NAME, UI_TEXT } from './constants';
+import type { CompassResponse } from './types';
 import { getCompassGuidance } from './services/geminiService';
+import { CompassHeader } from './components/CompassHeader';
+import { QueryForm } from './components/QueryForm';
+import { EmptyState } from './components/EmptyState';
+import { LoadingState } from './components/LoadingState';
+import { ErrorState } from './components/ErrorState';
+import { CompassResults } from './components/CompassResults';
 
-export default function App() {
+const App = () => {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState<CompassResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const submitQuery = async () => {
+  const canSubmit = useMemo(() => query.trim().length > 0 && !isLoading, [query, isLoading]);
+
+  const requestGuidance = async (nextQuery: string) => {
     setIsLoading(true);
-    setError('');
-
+    setErrorMessage(null);
     try {
-      const guidance = await getCompassGuidance(query);
-      setResult(guidance);
-    } catch (submitError) {
-      setResult(null);
-      const message = submitError instanceof Error ? submitError.message : 'Unknown error.';
-      setError(message);
+      const response = await getCompassGuidance(nextQuery);
+      setResult(response);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : UI_TEXT.errorFallback);
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (
-    <div className="app-shell">
-      <main className="app-container">
-        <CompassHeader />
-        <QueryForm query={query} onQueryChange={setQuery} onSubmit={submitQuery} isLoading={isLoading} />
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery || isLoading) return;
+    await requestGuidance(trimmedQuery);
+  };
 
-        {isLoading && <LoadingState />}
-        {!isLoading && error && <ErrorState message={error} />}
-        {!isLoading && !error && !result && <EmptyState />}
-        {!isLoading && !error && result && <CompassResults result={result} />}
-      </main>
-    </div>
+  const handleReset = () => {
+    setResult(null);
+    setQuery('');
+    setErrorMessage(null);
+  };
+
+  return (
+    <main className="app">
+      <div className="shell">
+        <CompassHeader title={APP_NAME} description={APP_COPY.subtitle} />
+        <section className="surface">
+          {!result && (
+            <QueryForm
+              query={query}
+              onQueryChange={setQuery}
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+              canSubmit={canSubmit}
+            />
+          )}
+          {isLoading && <LoadingState />}
+          {!isLoading && errorMessage && (
+            <ErrorState message={errorMessage} onRetry={() => void requestGuidance(query.trim())} />
+          )}
+          {!isLoading && !errorMessage && !result && (
+            <EmptyState
+              suggestions={APP_COPY.promptSuggestions}
+              onSelect={(suggestion) => {
+                setQuery(suggestion);
+                void requestGuidance(suggestion);
+              }}
+            />
+          )}
+          {!isLoading && !errorMessage && result && (
+            <>
+              <CompassResults response={result} />
+              <button className="reset-btn" onClick={handleReset}>↩ Ask another question</button>
+            </>
+          )}
+        </section>
+      </div>
+    </main>
   );
-}
+};
+
+export default App;

@@ -1,10 +1,8 @@
-import { APP_CONTENT } from '../constants';
+import { UI_TEXT } from '../constants';
 
-export default function LoadingState() {
-  return (
-    <section className="state-panel">
-      <h2>Generating guidance</h2>
-      <p>{APP_CONTENT.loadingLabel}</p>
-    </section>
-  );
-}
+export const LoadingState = () => (
+  <section className="state-panel" aria-live="polite" aria-busy="true">
+    <div className="spinner" aria-hidden="true" />
+    <p>{UI_TEXT.loading}</p>
+  </section>
+);

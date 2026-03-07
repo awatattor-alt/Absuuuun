@@ -1,8 +1,18 @@
-export default function EmptyState() {
-  return (
-    <section className="state-panel">
-      <h2>Ready when you are</h2>
-      <p>Ask a question above to get a structured action plan tailored for Iraq.</p>
-    </section>
-  );
+interface EmptyStateProps {
+  suggestions: string[];
+  onSelect: (suggestion: string) => void;
 }
+
+export const EmptyState = ({ suggestions, onSelect }: EmptyStateProps) => (
+  <section className="state-panel">
+    <h2>Ready when you are</h2>
+    <p>Pick a suggestion or write your own goal above.</p>
+    <div className="suggestions" role="list">
+      {suggestions.map((suggestion) => (
+        <button key={suggestion} type="button" className="chip" onClick={() => onSelect(suggestion)}>
+          {suggestion}
+        </button>
+      ))}
+    </div>
+  </section>
+);

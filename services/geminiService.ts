@@ -1,74 +1,75 @@
 import { GoogleGenAI, Type } from '@google/genai';
-import { CompassResponse } from '../types';
+import type { CompassResponse } from '../types';
 
-const apiKey =
-  import.meta.env.VITE_GEMINI_API_KEY ||
-  import.meta.env.GEMINI_API_KEY ||
-  process.env.GEMINI_API_KEY ||
-  process.env.API_KEY;
+const apiKey = import.meta.env.VITE_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || process.env.API_KEY;
 
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+const aiClient = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
-const fallbackResponse = (query: string): CompassResponse => ({
-  summary: `Here is a starter plan for: ${query}`,
+const mockResponse = (query: string): CompassResponse => ({
+  title: `Roadmap for: ${query}`,
   steps: [
     {
-      title: 'Clarify your goal',
-      explanation: 'Write down exactly what you need and your city so local rules are easier to match.',
-      action: 'Create a short checklist with timeline, budget, and location.',
+      title: 'Define the target clearly',
+      body: 'Break your goal into one specific outcome, your timeline, and the city/context in Iraq where you will execute it.',
     },
     {
-      title: 'Collect verified local sources',
-      explanation: 'Use official ministry/government pages and known local providers before social media posts.',
-      action: 'Cross-check at least 2 trusted sources and save phone numbers.',
+      title: 'Gather trusted local resources',
+      body: 'List official institutions, documents, and support channels you need before taking action.',
     },
     {
-      title: 'Take the first practical step',
-      explanation: 'Start with the easiest high-impact action to build momentum.',
-      action: 'Book one appointment or submit one required form today.',
+      title: 'Start with one immediate action',
+      body: 'Complete one concrete next step in the next 24 hours to create momentum and reduce uncertainty.',
     },
   ],
-  safetyNote:
-    'AI output may be incomplete or outdated. Confirm legal, medical, and safety details with official local authorities.',
+  tips: [
+    'Validate legal or medical advice with official local experts.',
+    'Track progress weekly and adjust based on what works.',
+    'Ask for help early from community groups or professionals.',
+  ],
 });
 
-export async function getCompassGuidance(query: string): Promise<CompassResponse> {
-  if (!query.trim()) {
-    throw new Error('Please enter a question.');
+export const getCompassGuidance = async (query: string): Promise<CompassResponse> => {
+  const trimmed = query.trim();
+  if (!trimmed) {
+    throw new Error('Please enter a goal or question.');
   }
 
-  if (!ai) {
-    return fallbackResponse(query);
+  if (!aiClient) {
+    return mockResponse(trimmed);
   }
 
-  const response = await ai.models.generateContent({
+  const prompt = `You are Iraq Compass. Create a practical roadmap for this request: "${trimmed}". Keep advice realistic and concise.`;
+
+  const response = await aiClient.models.generateContent({
     model: 'gemini-2.5-flash',
-    contents: `You are Iraq Compass, a practical assistant for people in Iraq. Return concise, actionable local guidance for this user query: ${query}`,
+    contents: prompt,
     config: {
       responseMimeType: 'application/json',
       responseSchema: {
         type: Type.OBJECT,
         properties: {
-          summary: { type: Type.STRING },
+          title: { type: Type.STRING },
           steps: {
             type: Type.ARRAY,
             items: {
               type: Type.OBJECT,
               properties: {
                 title: { type: Type.STRING },
-                explanation: { type: Type.STRING },
-                action: { type: Type.STRING },
+                body: { type: Type.STRING },
               },
-              required: ['title', 'explanation', 'action'],
+              required: ['title', 'body'],
             },
           },
-          safetyNote: { type: Type.STRING },
+          tips: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING },
+          },
         },
-        required: ['summary', 'steps', 'safetyNote'],
+        required: ['title', 'steps', 'tips'],
       },
     },
   });
 
   const parsed = JSON.parse(response.text) as CompassResponse;
   return parsed;
-}
+};

@@ -1,12 +1,14 @@
 interface ErrorStateProps {
   message: string;
+  onRetry: () => void;
 }
 
-export default function ErrorState({ message }: ErrorStateProps) {
-  return (
-    <section className="state-panel error-state">
-      <h2>Something went wrong</h2>
-      <p>{message}</p>
-    </section>
-  );
-}
+export const ErrorState = ({ message, onRetry }: ErrorStateProps) => (
+  <section className="state-panel error-state" role="alert">
+    <h2>Something went wrong</h2>
+    <p>{message}</p>
+    <button type="button" className="retry-btn" onClick={onRetry}>
+      Retry
+    </button>
+  </section>
+);

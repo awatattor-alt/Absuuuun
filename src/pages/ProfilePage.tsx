@@ -5,31 +5,25 @@ import { usePageTitle } from './usePageTitle';
 const ProfilePage: React.FC = () => {
   usePageTitle('Profile');
   const { user, updateProfile } = useAuth();
-  const [editing, setEditing] = useState(false);
   const [name, setName] = useState(user?.name || '');
 
   if (!user) return null;
 
   return (
-    <section className="p-4 md:p-8 pb-24 md:pb-8 space-y-4">
-      <h1 className="text-2xl text-white font-bold">Profile</h1>
-      <div className="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-3">
-        <div className="w-16 h-16 rounded-full bg-sky-600 grid place-items-center text-2xl text-white font-bold">{user.name[0]?.toUpperCase()}</div>
-        {!editing ? (
-          <>
-            <p className="text-white">{user.name}</p>
-            <p className="text-slate-300">{user.email}</p>
-            <button onClick={() => setEditing(true)} className="px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-500">Edit Profile</button>
-          </>
-        ) : (
-          <div className="space-y-2">
-            <input value={name} onChange={(e) => setName(e.target.value)} className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white" />
-            <input value={user.email} readOnly className="w-full p-2 rounded bg-slate-900 border border-slate-700 text-slate-400" />
-            <button onClick={() => { if (!name.trim()) return; updateProfile(name); setEditing(false); }} className="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500">Save</button>
+    <main className="page-wrap stack">
+      <h1 className="page-title">Profile</h1>
+      <section className="card stack" style={{ maxWidth: 560 }}>
+        <div className="row">
+          <div style={{ width: 60, height: 60, borderRadius: '50%', background: '#0ea5e9', display: 'grid', placeItems: 'center', fontWeight: 700 }}>{user.avatar}</div>
+          <div>
+            <strong>{user.name}</strong>
+            <div className="muted">{user.email}</div>
           </div>
-        )}
-      </div>
-    </section>
+        </div>
+        <label className="stack">Display name<input className="input" value={name} onChange={(e) => setName(e.target.value)} /></label>
+        <button className="btn btn-primary" onClick={() => name.trim() && updateProfile(name.trim())}>Save profile</button>
+      </section>
+    </main>
   );
 };
 

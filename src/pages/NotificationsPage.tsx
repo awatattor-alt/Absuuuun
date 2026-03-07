@@ -6,22 +6,19 @@ const NotificationsPage: React.FC = () => {
   usePageTitle('Notifications');
   const [items, setItems] = useState(NOTIFICATIONS);
 
-  const markOne = (id: string) => setItems((prev) => prev.map((n) => n.id === id ? { ...n, read: true } : n));
-
   return (
-    <section className="p-4 md:p-8 pb-24 md:pb-8 space-y-3">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-white">Notifications</h1>
-        <button onClick={() => setItems((prev) => prev.map((n) => ({ ...n, read: true })))} className="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white focus:ring-2 focus:ring-sky-400">Mark all as read</button>
+    <main className="page-wrap stack">
+      <div className="between">
+        <h1 className="page-title">Notifications</h1>
+        <button className="btn btn-ghost" onClick={() => setItems((prev) => prev.map((n) => ({ ...n, read: true })))}>Mark all read</button>
       </div>
       {items.map((n) => (
-        <button key={n.id} onClick={() => markOne(n.id)} className={`w-full text-left rounded-xl border p-4 ${n.read ? 'border-slate-700 bg-slate-800' : 'border-sky-500 bg-slate-800 border-l-4'}`}>
-          <div className="flex items-center justify-between"><p className="text-white font-medium">{n.title}</p>{!n.read && <span className="w-2 h-2 rounded-full bg-sky-400" />}</div>
-          <p className="text-slate-300 text-sm">{n.body}</p>
-          <p className="text-xs text-slate-400 mt-1">{n.time}</p>
+        <button key={n.id} onClick={() => setItems((prev) => prev.map((it) => it.id === n.id ? { ...it, read: true } : it))} className="card stack" style={{ textAlign: 'left', borderColor: n.read ? 'var(--border)' : 'var(--primary)' }}>
+          <div className="between"><strong>{n.title}</strong><small className="muted">{n.time}</small></div>
+          <span className="muted">{n.body}</span>
         </button>
       ))}
-    </section>
+    </main>
   );
 };
 

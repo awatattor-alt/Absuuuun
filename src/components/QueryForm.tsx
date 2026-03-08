@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { APP_COPY } from '../constants';
+import { getPromptSuggestions } from '../services/compassService';
 
 interface QueryFormProps {
   onSubmit: (query: string) => void;
@@ -33,12 +33,13 @@ export const QueryForm: React.FC<QueryFormProps> = ({ onSubmit, isLoading }) => 
       </form>
 
       <div className="suggestion-chips">
-        {APP_COPY.promptSuggestions.map((suggestion, index) => (
+        {getPromptSuggestions().map((suggestion, index) => (
           <button
             key={index}
             className="suggestion-chip"
             onClick={() => setQuery(suggestion)}
             disabled={isLoading}
+            type="button"
           >
             {suggestion}
           </button>

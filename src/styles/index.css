@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #061126;
+  --surface: #0b1c3b;
+  --surface-2: #132a52;
+  --primary: #4b86ff;
+  --primary-light: #7ca6ff;
+  --text: #e7f0ff;
+  --text-muted: #9fb7de;
+  --border: rgba(124, 166, 255, 0.24);
+}
+
+body {
+  background: radial-gradient(circle at top, #0d2347, var(--bg) 60%);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.app { min-height: 100vh; padding: 0 16px 80px; }
+.shell { max-width: 760px; margin: 0 auto; }
+.compass-header { text-align: center; padding: 48px 0 32px; }
+.compass-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin: 0; }
+.compass-subtitle { font-size: 16px; color: var(--text-muted); margin-top: 8px; }
+
+.surface { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin-top: 24px; }
+.query-form label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary-light); display: block; margin-bottom: 10px; }
+.query-form textarea,
+.discovery-search input {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+}
+.query-form textarea { resize: vertical; min-height: 110px; }
+
+.query-form button[type='submit'],
+.discovery-search button {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #061126;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.query-form button[type='submit'] { float: right; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.suggestion-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; clear: both; }
+.suggestion-chip { background: var(--surface-2); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 13px; color: var(--text-muted); }
+
+.loading-state { text-align: center; padding: 30px 0 10px; color: var(--text-muted); }
+.result-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 20px; }
+.step-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 12px; border-left: 3px solid var(--primary); }
+.step-title { font-family: 'Playfair Display', serif; font-size: 16px; margin: 0 0 6px; }
+.step-body { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin: 0; }
+.meta-line { margin-top: 8px; color: var(--primary-light); font-size: 12px; }
+.tips-section { background: rgba(75, 134, 255, 0.08); border: 1px solid rgba(124, 166, 255, 0.4); border-radius: 12px; padding: 20px 22px; margin-top: 8px; }
+.reset-btn { width: 100%; margin-top: 20px; background: none; border: 1px solid var(--border); border-radius: 9px; color: var(--text-muted); padding: 10px; }
+
+.discovery-search { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 16px; }
+
+@media (max-width: 640px) {
+  .compass-title { font-size: 2.2rem; }
+  .surface { padding: 20px; }
+  .discovery-search { grid-template-columns: 1fr; }
+}

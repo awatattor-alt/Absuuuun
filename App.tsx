@@ -1,69 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import { Screen, Lang, City, CategoryId } from './types';
-import { HomeScreen } from './components/HomeScreen';
-import { CategoryScreen } from './components/CategoryScreen';
-import { BusinessDetail } from './components/BusinessDetail';
+import React, { useState } from 'react';
+import { QueryForm } from './components/QueryForm';
+import { APP_COPY } from './constants';
 
 function App() {
-  const [screen, setScreen] = useState<Screen>({ view: 'home' });
-  const [lang, setLang] = useState<Lang>('en');
-  const [city, setCity] = useState<City>('Sulaymaniyah');
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState<string | null>(null);
 
-  useEffect(() => {
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = lang;
-  }, [lang]);
-
-  const handleNavigate = (view: 'home' | 'category' | 'business', id?: string) => {
-    if (view === 'home') {
-      setScreen({ view: 'home' });
-    } else if (view === 'category' && id) {
-      setScreen({ view: 'category', categoryId: id as CategoryId });
-    } else if (view === 'business' && id) {
-      setScreen({ view: 'business', businessId: id });
-    }
-  };
-
-  const toggleLang = () => {
-    setLang(prev => prev === 'en' ? 'ar' : 'en');
+  const handleQuery = async (query: string) => {
+    setIsLoading(true);
+    setResults(null);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setResults("This is a simulated response for: " + query);
+      setIsLoading(false);
+    }, 1500);
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 font-sans text-gray-900 mx-auto max-w-[448px] shadow-2xl relative overflow-hidden">
-      {/* Language Toggle */}
-      <button 
-        onClick={toggleLang}
-        className="absolute top-4 right-4 z-50 bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-sm hover:bg-white/30 transition-colors"
-      >
-        {lang === 'en' ? '🇮🇶 عربي' : '🌐 English'}
-      </button>
-
-      {/* Screen Rendering */}
-      {screen.view === 'home' && (
-        <HomeScreen 
-          lang={lang} 
-          city={city} 
-          onCityChange={setCity} 
-          onNavigate={handleNavigate} 
-        />
-      )}
-      
-      {screen.view === 'category' && (
-        <CategoryScreen 
-          categoryId={screen.categoryId} 
-          city={city} 
-          lang={lang} 
-          onNavigate={handleNavigate} 
-        />
-      )}
-      
-      {screen.view === 'business' && (
-        <BusinessDetail 
-          businessId={screen.businessId} 
-          lang={lang} 
-          onNavigate={handleNavigate} 
-        />
-      )}
+    <div className="app">
+      <div className="shell">
+        <header className="compass-header">
+          <h1 className="compass-title">Iraq Compass</h1>
+          <p className="compass-subtitle">Your guide to navigating life and business in Iraq.</p>
+        </header>
+        
+        <QueryForm onSubmit={handleQuery} isLoading={isLoading} />
+        
+        {isLoading && (
+          <div className="loading-state">
+            <p>Consulting the compass...</p>
+          </div>
+        )}
+        
+        {results && (
+          <div className="compass-results">
+            <div className="surface">
+              <h2 className="result-title">Your Path Forward</h2>
+              <div className="step-card">
+                <h3 className="step-title">Step 1: Understand the Landscape</h3>
+                <p className="step-body">{results}</p>
+              </div>
+              <div className="tips-section">
+                <p className="step-body"><strong>Tip:</strong> Always verify local regulations.</p>
+              </div>
+              <button className="reset-btn" onClick={() => setResults(null)}>
+                Start New Query
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,0 +1,49 @@
+:root {
+  --bg: #081426;
+  --bg-soft: #0c1d34;
+  --surface: #112844;
+  --surface-muted: #18355a;
+  --text: #e9f1ff;
+  --text-muted: #aac1e6;
+  --primary: #4da3ff;
+  --primary-soft: #7dc0ff;
+  --border: rgba(125, 192, 255, 0.25);
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: radial-gradient(circle at top, #0f2e52 0%, var(--bg) 45%);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
+
+.app { min-height: 100vh; padding: 0 16px 64px; }
+.shell { max-width: 780px; margin: 0 auto; }
+.compass-header { text-align: center; padding: 40px 0 24px; }
+.compass-title { display:flex; justify-content:center; align-items:center; gap:8px; margin:0; font-size:2.2rem; }
+.compass-subtitle { color: var(--text-muted); margin: 8px 0 14px; }
+.auth-strip { display: inline-flex; gap: 10px; align-items:center; font-size: 13px; color: var(--text-muted); }
+.auth-strip button,
+.query-form button,
+.reset-btn,
+.suggestion-chip {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  color: var(--text);
+}
+
+.surface { background: rgba(17, 40, 68, 0.9); border:1px solid var(--border); border-radius:14px; padding: 22px; margin-top: 16px; }
+.query-form label { display:block; margin-bottom:10px; color: var(--primary-soft); font-weight: 600; font-size: 13px; }
+.query-form textarea { width:100%; min-height:100px; box-sizing:border-box; border-radius:10px; border:1px solid var(--border); background:var(--bg-soft); color:var(--text); padding:12px; }
+.query-form button[type='submit'] { margin-top: 12px; float: right; display:flex; gap:8px; align-items:center; padding:10px 16px; background:linear-gradient(135deg, #3578d4, #4da3ff); border: none; }
+.query-form button:disabled { opacity: 0.6; }
+.suggestion-chips { clear:both; display:flex; flex-wrap:wrap; gap:8px; margin-top: 18px; }
+.suggestion-chip { cursor:pointer; padding: 7px 12px; color: var(--text-muted); }
+.loading-state,.error-state,.empty-state { text-align:center; color: var(--text-muted); padding: 16px; }
+.step-card { margin-top:12px; border-left:3px solid var(--primary); }
+.step-title { margin:0 0 6px; }
+.step-body { margin:0; color: var(--text-muted); }
+.event-meta { display:flex; flex-wrap:wrap; gap:14px; margin-top: 12px; font-size: 13px; color: var(--primary-soft); }
+.event-meta span { display:flex; align-items:center; gap:4px; }
+.event-category { margin-left:auto; font-weight:600; }

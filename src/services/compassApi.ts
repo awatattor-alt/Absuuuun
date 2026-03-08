@@ -1,5 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
-import type { CompassResponse } from '../features/compass/types';
+import type { CompassResponse } from '../types/compass';
 import { GEMINI_API_KEY } from '../utils/env';
 
 const MODEL = 'gemini-2.5-flash';

@@ -1,36 +1,24 @@
-import { QueryForm } from './components/QueryForm';
-import { ResultPanel } from './components/ResultPanel';
-import { useCompassQuery } from './hooks/useCompassQuery';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Layout } from './components/layout/Layout';
+import CompassPage from './pages/Compass';
+import Dashboard from './pages/Dashboard';
+import Goals from './pages/Goals';
+import Journal from './pages/Journal';
+import Settings from './pages/Settings';
 
-function App() {
-  const { isLoading, result, error, submitQuery, reset } = useCompassQuery();
-
+export default function App() {
   return (
-    <div className="app">
-      <div className="shell">
-        <header className="compass-header">
-          <h1 className="compass-title">Iraq Compass</h1>
-          <p className="compass-subtitle">Your guide to navigating life and business in Iraq.</p>
-        </header>
-
-        <QueryForm onSubmit={submitQuery} isLoading={isLoading} />
-
-        {isLoading && (
-          <div className="loading-state">
-            <p>Consulting the compass...</p>
-          </div>
-        )}
-
-        {error && (
-          <div className="error-state">
-            <p>{error}</p>
-          </div>
-        )}
-
-        {result && <ResultPanel result={result} onReset={reset} />}
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/compass" element={<CompassPage />} />
+          <Route path="/goals" element={<Goals />} />
+          <Route path="/journal" element={<Journal />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

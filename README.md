@@ -1,20 +1,28 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Iraq Compass (Absuuuun Base)
 
-# Run and deploy your AI Studio app
+Unified React + TypeScript + Vite app using **Absuuuun as the design foundation** and a modular structure for integrating logic from additional repositories.
 
-This contains everything you need to run your app locally.
+## Project structure
 
-View your app in AI Studio: https://ai.studio/apps/5c5d9957-94e7-4676-8632-f39ea4083651
+```txt
+src/
+  components/
+  features/
+  hooks/
+  pages/
+  services/
+  styles/
+  utils/
+```
 
-## Run Locally
+## Scripts
 
-**Prerequisites:**  Node.js
+- `npm run dev`
+- `npm run lint`
+- `npm run build`
 
+## Notes on merge direction
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- UI remains based on the Absuuuun flow/layout and navy-first theme tokens.
+- Functional logic is organized into reusable hooks/services so cross-repo integrations can be added without replacing UI structure.
+- Discovery and guidance logic are currently mocked and ready to connect to real APIs.

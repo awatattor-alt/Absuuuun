@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #071326;
+  --surface: #0e1d35;
+  --surface-alt: #132746;
+  --primary: #4ea1ff;
+  --primary-soft: #7fb9ff;
+  --text: #e9f1ff;
+  --text-muted: #a8b9d4;
+  --border: rgba(127, 185, 255, 0.25);
+}
+
+body {
+  background: radial-gradient(circle at top, #0c2240 0%, var(--bg) 45%);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.app { min-height: 100vh; padding: 0 16px 80px; }
+.shell { max-width: 720px; margin: 0 auto; }
+.compass-header { text-align: center; padding: 48px 0 32px; }
+.compass-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin: 0; }
+.compass-subtitle { font-size: 16px; color: var(--text-muted); margin-top: 8px; }
+
+.surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  margin-top: 32px;
+}
+
+.query-form label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary-soft); display: block; margin-bottom: 10px; }
+.query-form textarea {
+  width: 100%;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  padding: 14px 16px;
+  resize: vertical;
+  min-height: 110px;
+  outline: none;
+  box-sizing: border-box;
+}
+.query-form textarea:focus { border-color: var(--primary-soft); }
+
+.query-form button[type=submit] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #3f8df0, #74b6ff);
+  color: #06152b;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  float: right;
+}
+.query-form button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.suggestion-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; clear: both; }
+.suggestion-chip {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.suggestion-chip:hover { border-color: var(--primary-soft); color: var(--text); }
+
+.loading-state, .error-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+.result-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 20px; }
+.step-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 12px;
+}
+.step-title { font-family: 'Playfair Display', serif; font-size: 16px; margin: 0 0 6px; }
+.step-body { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin: 0; white-space: pre-wrap; }
+
+.tips-section {
+  background: rgba(78, 161, 255, 0.09);
+  border: 1px solid rgba(127, 185, 255, 0.35);
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-top: 8px;
+}
+
+.reset-btn {
+  display: block; width: 100%; margin-top: 20px;
+  background: none; border: 1px solid var(--border); border-radius: 9px; color: var(--text-muted);
+  padding: 10px; font-size: 13px; cursor: pointer; transition: all 0.2s;
+}
+.reset-btn:hover { border-color: var(--primary-soft); color: var(--primary-soft); }
+
+@media (max-width: 480px) {
+  .compass-title { font-size: 2.2rem; }
+  .surface { padding: 20px; }
+  .query-form textarea { font-size: 14px; }
+  .suggestion-chip { font-size: 12px; }
+  .step-card { padding: 16px; }
+}

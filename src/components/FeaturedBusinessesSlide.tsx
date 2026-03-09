@@ -19,7 +19,7 @@ const FeaturedBusinessesSlide: React.FC<FeaturedBusinessesSlideProps> = ({ t, se
       {featured.length > 0 ? (
         <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4 hide-scrollbar">
           {featured.map(business => (
-            <div key={business.id} className="w-80 md:w-96 flex-shrink-0">
+            <div key={business.id} className="w-[260px] flex-shrink-0">
               <GlassCard
                 imageUrl={business.imageUrl}
                 title={business.name}

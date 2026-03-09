@@ -2,11 +2,8 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Event } from '../types';
 
-if (!process.env.API_KEY) {
-  console.warn("API_KEY environment variable not set. Using a mock implementation.");
-}
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+const key = import.meta.env.VITE_GEMINI_API_KEY ?? null;
+const ai = key ? new GoogleGenAI({ apiKey: key }) : null;
 
 const eventSchema = {
   type: Type.OBJECT,
@@ -31,22 +28,8 @@ const eventSchema = {
   required: ["eventName", "description", "city", "suggestedDate"],
 };
 
-const mockEvent: Event = {
-    eventName: "Tigris River Night Market",
-    description: "Experience a vibrant market along the Tigris with local crafts, food stalls, and live traditional music.",
-    city: "Baghdad",
-    suggestedDate: "Every Thursday Evening"
-};
-
 export const generateCuratedEvents = async (): Promise<Event[]> => {
-  if (!process.env.API_KEY) {
-    // Return mock data if API key is not available
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(Array(6).fill(mockEvent).map((e, i) => ({...e, eventName: `${e.eventName} #${i+1}`})));
-        }, 1500);
-    });
-  }
+  if (!ai) return [];
 
   try {
     const response = await ai.models.generateContent({
@@ -66,6 +49,6 @@ export const generateCuratedEvents = async (): Promise<Event[]> => {
     return events;
   } catch (error) {
     console.error("Error generating curated events:", error);
-    throw new Error("Failed to generate events from AI.");
+    return [];
   }
 };

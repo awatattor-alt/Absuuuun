@@ -76,6 +76,9 @@ const BusinessDirectorySlide = forwardRef<HTMLElement, BusinessDirectorySlidePro
         case 'rating-desc':
             businesses.sort((a, b) => b.rating - a.rating);
             break;
+        case 'reviews-desc':
+            businesses.sort((a, b) => b.reviewCount - a.reviewCount);
+            break;
         default:
             break;
     }
@@ -142,8 +145,9 @@ const BusinessDirectorySlide = forwardRef<HTMLElement, BusinessDirectorySlidePro
             </select>
             <select aria-label={t.businessDirectory.sortBy} value={activeFilters.sortBy} onChange={(e) => handleFilterChange('sortBy', e.target.value)} className={glassSelectStyle}>
                 <option value="default" className="bg-[#0A0E27]">{t.businessDirectory.sortDefault}</option>
-                <option value="name-asc" className="bg-[#0A0E27]">{t.businessDirectory.sortNameAsc}</option>
-                <option value="rating-desc" className="bg-[#0A0E27]">{t.businessDirectory.sortRatingDesc}</option>
+                <option value="name-asc" className="bg-[#0A0E27]">A-Z</option>
+                <option value="rating-desc" className="bg-[#0A0E27]">{t.highestRated}</option>
+                <option value="reviews-desc" className="bg-[#0A0E27]">{t.mostReviewed}</option>
             </select>
             <button onClick={handleReset} className="px-4 py-2 bg-white/10 border border-white/10 rounded-xl hover:bg-white/20 transition-all duration-300 h-full col-span-1 sm:col-span-2 lg:col-span-3 font-semibold text-sm">{t.businessDirectory.resetFilters}</button>
         </div>

@@ -3,7 +3,7 @@ import type { TranslationSet, Language, Category } from '../types';
 import StoryBubble from './StoryBubble';
 import StoryViewer from './StoryViewer';
 import CategoryModal from './CategoryModal';
-import { MOCK_STORIES, CATEGORIES, GOVERNORATES } from '../constants';
+import { MOCK_STORIES, CATEGORIES, GOVERNORATES, MOCK_BUSINESSES } from '../constants';
 import { Search, Microphone } from './IconComponents';
 
 interface HeroSlideProps {
@@ -12,6 +12,7 @@ interface HeroSlideProps {
   onCategorySelect: (categoryId: string) => void;
   selectedGovernorate: string;
   onGovernorateChange: (govId: string) => void;
+  onSearch: (query: string) => void;
 }
 
 // FIX: Add type definitions for the Web Speech API to resolve "Cannot find name 'SpeechRecognition'" errors.
@@ -73,7 +74,7 @@ interface CustomWindow extends Window {
 }
 declare const window: CustomWindow;
 
-const HeroSlide: React.FC<HeroSlideProps> = ({ t, language, onCategorySelect, selectedGovernorate, onGovernorateChange }) => {
+const HeroSlide: React.FC<HeroSlideProps> = ({ t, language, onCategorySelect, selectedGovernorate, onGovernorateChange, onSearch }) => {
   const [searchValue, setSearchValue] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [speechRecognitionSupported, setSpeechRecognitionSupported] = useState(false);
@@ -132,6 +133,10 @@ const HeroSlide: React.FC<HeroSlideProps> = ({ t, language, onCategorySelect, se
   }, [language]);
 
 
+  const handleSearch = () => {
+    onSearch(searchValue.trim());
+  };
+
   const handleVoiceSearch = () => {
     if (isListening || !recognitionRef.current) {
       return;
@@ -166,6 +171,7 @@ const HeroSlide: React.FC<HeroSlideProps> = ({ t, language, onCategorySelect, se
             aria-label={t.hero.searchPlaceholder}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             disabled={isListening}
           />
           <div className="absolute end-3 bottom-3 flex items-center gap-3">
@@ -186,6 +192,7 @@ const HeroSlide: React.FC<HeroSlideProps> = ({ t, language, onCategorySelect, se
                   </button>
               )}
               <button
+                onClick={handleSearch}
                 className="bg-gradient-to-r from-[#6C2BD9] to-[#00D9FF] text-white font-bold px-8 py-3 rounded-full hover:opacity-90 transition-all duration-300 shadow-lg shadow-[#6C2BD9]/30 transform hover:scale-105 active:scale-95"
               >
                 {t.hero.searchButton}
@@ -226,6 +233,10 @@ const HeroSlide: React.FC<HeroSlideProps> = ({ t, language, onCategorySelect, se
             >
               <category.icon className="w-7 h-7 transition-transform duration-300 group-hover:scale-110" />
               <span className="text-xs text-center">{t.categories[category.labelKey]}</span>
+              <span className="text-[10px] text-gray-400">{(() => {
+                const count = MOCK_BUSINESSES.filter((business) => business.category === category.id).length;
+                return count > 0 ? `${count} places` : 'Coming soon';
+              })()}</span>
             </button>
           ))}
         </div>

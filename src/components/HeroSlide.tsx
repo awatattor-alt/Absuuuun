@@ -3,7 +3,7 @@ import type { TranslationSet, Language, Category } from '../types';
 import StoryBubble from './StoryBubble';
 import StoryViewer from './StoryViewer';
 import CategoryModal from './CategoryModal';
-import { MOCK_STORIES, CATEGORIES, GOVERNORATES } from '../constants';
+import { MOCK_STORIES, CATEGORIES, GOVERNORATES, MOCK_BUSINESSES } from '../constants';
 import { Search, Microphone } from './IconComponents';
 
 interface HeroSlideProps {
@@ -84,6 +84,12 @@ const HeroSlide: React.FC<HeroSlideProps> = ({ t, language, onCategorySelect, se
   
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+
+  const categoryCounts = CATEGORIES.reduce<Record<string, number>>((acc, category) => {
+    acc[category.id] = MOCK_BUSINESSES.filter((business) => business.category === category.id).length;
+    return acc;
+  }, {});
+
 
   const handleStoryClick = (index: number) => {
     setActiveStoryIndex(index);
@@ -226,6 +232,7 @@ const HeroSlide: React.FC<HeroSlideProps> = ({ t, language, onCategorySelect, se
             >
               <category.icon className="w-7 h-7 transition-transform duration-300 group-hover:scale-110" />
               <span className="text-xs text-center">{t.categories[category.labelKey]}</span>
+              <span className="text-[11px] text-gray-400">{categoryCounts[category.id] > 0 ? `${categoryCounts[category.id]} places` : t.comingSoon}</span>
             </button>
           ))}
         </div>

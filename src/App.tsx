@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Language } from './types';
+import { Language, Business } from './types';
 import Header from './components/Header';
 import HeroSlide from './components/HeroSlide';
 import FeaturedBusinessesSlide from './components/FeaturedBusinessesSlide';
@@ -8,6 +8,7 @@ import DealsMarketplaceSlide from './components/DealsMarketplaceSlide';
 import BusinessDirectorySlide from './components/BusinessDirectorySlide';
 import CityNavigatorSlide from './components/CityNavigatorSlide';
 import AccessibilityHubSlide from './components/AccessibilityHubSlide';
+import DetailView from './components/DetailView';
 import { TRANSLATIONS } from './constants';
 
 const App: React.FC = () => {
@@ -25,6 +26,7 @@ const App: React.FC = () => {
     sortBy: 'default'
   });
   const businessDirectoryRef = useRef<HTMLElement>(null);
+  const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(null);
 
   const handleCategorySelect = (categoryId: string) => {
     setActiveFilters(prev => ({ 
@@ -76,30 +78,42 @@ const App: React.FC = () => {
         <Header language={language} setLanguage={setLanguage} t={t} />
 
         <main className="container mx-auto px-4 py-8 flex flex-col gap-16 md:gap-24">
-          <HeroSlide 
-            t={t} 
-            language={language} 
-            onCategorySelect={handleCategorySelect}
-            selectedGovernorate={selectedGovernorate}
-            onGovernorateChange={setSelectedGovernorate}
-          />
-          <FeaturedBusinessesSlide t={t} selectedGovernorate={selectedGovernorate} />
-          <CuratedEventsSlide t={t} />
-          <DealsMarketplaceSlide t={t} selectedGovernorate={selectedGovernorate} />
-          <BusinessDirectorySlide
-            ref={businessDirectoryRef}
-            t={t}
-            activeFilters={activeFilters}
-            setActiveFilters={setActiveFilters}
-          />
-          <CityNavigatorSlide t={t} />
-          <AccessibilityHubSlide
-            t={t}
-            fontSize={fontSize}
-            setFontSize={setFontSize}
-            reduceMotion={reduceMotion}
-            setReduceMotion={setReduceMotion}
-          />
+          {selectedBusiness ? (
+            <DetailView
+              business={selectedBusiness}
+              t={t}
+              onBack={() => setSelectedBusiness(null)}
+              onSelectBusiness={setSelectedBusiness}
+            />
+          ) : (
+            <>
+              <HeroSlide 
+                t={t} 
+                language={language} 
+                onCategorySelect={handleCategorySelect}
+                selectedGovernorate={selectedGovernorate}
+                onGovernorateChange={setSelectedGovernorate}
+              />
+              <FeaturedBusinessesSlide t={t} selectedGovernorate={selectedGovernorate} onBusinessSelect={setSelectedBusiness} />
+              <CuratedEventsSlide t={t} />
+              <DealsMarketplaceSlide t={t} selectedGovernorate={selectedGovernorate} />
+              <BusinessDirectorySlide
+                ref={businessDirectoryRef}
+                t={t}
+                activeFilters={activeFilters}
+                setActiveFilters={setActiveFilters}
+                onBusinessSelect={setSelectedBusiness}
+              />
+              <CityNavigatorSlide t={t} />
+              <AccessibilityHubSlide
+                t={t}
+                fontSize={fontSize}
+                setFontSize={setFontSize}
+                reduceMotion={reduceMotion}
+                setReduceMotion={setReduceMotion}
+              />
+            </>
+          )}
         </main>
         
         <footer className="text-center p-8 mt-16 border-t border-white/10 text-gray-400">

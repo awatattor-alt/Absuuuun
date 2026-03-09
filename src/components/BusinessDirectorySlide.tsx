@@ -17,6 +17,7 @@ interface BusinessDirectorySlideProps {
   t: TranslationSet;
   activeFilters: ActiveFilters;
   setActiveFilters: React.Dispatch<React.SetStateAction<ActiveFilters>>;
+  onBusinessSelect?: (business: Business) => void;
 }
 
 const BusinessListItem: React.FC<{ business: Business }> = ({ business }) => (
@@ -40,8 +41,9 @@ const BusinessListItem: React.FC<{ business: Business }> = ({ business }) => (
   </div>
 );
 
-const BusinessDirectorySlide = forwardRef<HTMLElement, BusinessDirectorySlideProps>(({ t, activeFilters, setActiveFilters }, ref) => {
+const BusinessDirectorySlide = forwardRef<HTMLElement, BusinessDirectorySlideProps>(({ t, activeFilters, setActiveFilters, onBusinessSelect }, ref) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState<'highest-rated' | 'most-reviewed' | 'a-z'>('highest-rated');
   
   const handleFilterChange = (key: keyof ActiveFilters, value: string) => {
     setActiveFilters(prev => ({...prev, [key]: value}));
@@ -69,19 +71,22 @@ const BusinessDirectorySlide = forwardRef<HTMLElement, BusinessDirectorySlidePro
       );
     });
 
-    switch (activeFilters.sortBy) {
-        case 'name-asc':
-            businesses.sort((a, b) => a.name.localeCompare(b.name));
-            break;
-        case 'rating-desc':
-            businesses.sort((a, b) => b.rating - a.rating);
-            break;
-        default:
-            break;
+    switch (sortBy) {
+      case 'highest-rated':
+        businesses.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'most-reviewed':
+        businesses.sort((a, b) => (b.reviewCount ?? 0) - (a.reviewCount ?? 0));
+        break;
+      case 'a-z':
+        businesses.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      default:
+        break;
     }
 
     return businesses;
-  }, [activeFilters]);
+  }, [activeFilters, sortBy]);
   
   const glassSelectStyle = "bg-white/5 border border-white/20 rounded-lg backdrop-blur-lg focus:ring-2 focus:ring-[#00D9FF] focus:outline-none py-2 px-3 w-full";
 
@@ -140,10 +145,15 @@ const BusinessDirectorySlide = forwardRef<HTMLElement, BusinessDirectorySlidePro
                 <option value="3" className="bg-[#0A0E27]">3+ Stars</option>
                 <option value="2" className="bg-[#0A0E27]">2+ Stars</option>
             </select>
-            <select aria-label={t.businessDirectory.sortBy} value={activeFilters.sortBy} onChange={(e) => handleFilterChange('sortBy', e.target.value)} className={glassSelectStyle}>
-                <option value="default" className="bg-[#0A0E27]">{t.businessDirectory.sortDefault}</option>
-                <option value="name-asc" className="bg-[#0A0E27]">{t.businessDirectory.sortNameAsc}</option>
-                <option value="rating-desc" className="bg-[#0A0E27]">{t.businessDirectory.sortRatingDesc}</option>
+            <select
+              aria-label={t.businessDirectory.sortBy}
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as 'highest-rated' | 'most-reviewed' | 'a-z')}
+              style={{ background: '#0F1629', border: '1px solid #1E2D52', color: '#F0EDE8', borderRadius: '8px', padding: '6px 12px' }}
+            >
+                <option value="highest-rated" className="bg-[#0A0E27]">Highest Rated</option>
+                <option value="most-reviewed" className="bg-[#0A0E27]">Most Reviewed</option>
+                <option value="a-z" className="bg-[#0A0E27]">A-Z</option>
             </select>
             <button onClick={handleReset} className="px-4 py-2 bg-white/10 border border-white/10 rounded-xl hover:bg-white/20 transition-all duration-300 h-full col-span-1 sm:col-span-2 lg:col-span-3 font-semibold text-sm">{t.businessDirectory.resetFilters}</button>
         </div>
@@ -154,6 +164,7 @@ const BusinessDirectorySlide = forwardRef<HTMLElement, BusinessDirectorySlidePro
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAndSortedBusinesses.map(business => (
               <GlassCard
+                onClick={() => onBusinessSelect?.(business)}
                 key={business.id}
                 imageUrl={business.imageUrl}
                 title={business.name}

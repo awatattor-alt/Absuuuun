@@ -3,6 +3,8 @@ import React, { ComponentType } from 'react';
 import { MapPin } from './IconComponents';
 
 interface GlassCardProps {
+  onClick?: () => void;
+  compact?: boolean;
   imageUrl: string;
   title: string;
   subtitle: string;
@@ -14,7 +16,7 @@ interface GlassCardProps {
   };
 }
 
-const GlassCard: React.FC<GlassCardProps> = ({ imageUrl, title, subtitle, category, badge }) => {
+const GlassCard: React.FC<GlassCardProps> = ({ imageUrl, title, subtitle, category, badge, onClick, compact = false }) => {
   const badgeColorClasses = {
     purple: 'bg-[#6C2BD9]/20 text-[#a37cf0]',
     pink: 'bg-[#FF2E97]/20 text-[#FF2E97]',
@@ -22,8 +24,8 @@ const GlassCard: React.FC<GlassCardProps> = ({ imageUrl, title, subtitle, catego
   };
 
   return (
-    <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden group transition-all duration-500 hover:bg-white/15 hover:border-white/30 transform hover:-translate-y-1.5 shadow-xl hover:shadow-[#6C2BD9]/30 h-full flex flex-col">
-      <div className="relative overflow-hidden h-40">
+    <div onClick={onClick} className={`relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden group transition-all duration-500 hover:bg-white/15 hover:border-white/30 transform hover:-translate-y-1.5 shadow-xl hover:shadow-[#6C2BD9]/30 h-full flex flex-col ${onClick ? 'cursor-pointer' : ''}`}>
+      <div className={`relative overflow-hidden ${compact ? 'h-28' : 'h-40'}`}>
         <img 
           src={imageUrl} 
           alt={title} 
@@ -32,10 +34,10 @@ const GlassCard: React.FC<GlassCardProps> = ({ imageUrl, title, subtitle, catego
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       </div>
-      <div className="p-5 flex flex-col flex-grow">
+      <div className={`flex flex-col flex-grow ${compact ? 'p-3' : 'p-5'}`} >
         <div className="flex justify-between items-start flex-grow gap-2">
           <div>
-            <h3 className="font-bold text-lg text-white group-hover:text-[#00D9FF] transition-colors duration-300">{title}</h3>
+            <h3 className={`font-bold text-white group-hover:text-[#00D9FF] transition-colors duration-300 ${compact ? 'text-base' : 'text-lg'}`}>{title}</h3>
             <p className="text-sm text-gray-400 flex items-center gap-1.5 mt-1">
               <MapPin className="w-3.5 h-3.5 text-[#00D9FF]"/>
               {subtitle}

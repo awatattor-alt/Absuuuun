@@ -10,10 +10,23 @@ export const LANGUAGES: { code: Language; name: string }[] = [
 export const GOVERNORATES = [
   { id: 'all', labelKey: 'all' },
   { id: 'Baghdad', labelKey: 'baghdad' },
-  { id: 'Erbil', labelKey: 'erbil' },
   { id: 'Basra', labelKey: 'basra' },
+  { id: 'Erbil', labelKey: 'erbil' },
   { id: 'Slemani', labelKey: 'slemani' },
   { id: 'Duhok', labelKey: 'duhok' },
+  { id: 'Nineveh', labelKey: 'nineveh' },
+  { id: 'Kirkuk', labelKey: 'kirkuk' },
+  { id: 'Karbala', labelKey: 'karbala' },
+  { id: 'Najaf', labelKey: 'najaf' },
+  { id: 'Anbar', labelKey: 'anbar' },
+  { id: 'Diyala', labelKey: 'diyala' },
+  { id: 'Babil', labelKey: 'babil' },
+  { id: 'Wasit', labelKey: 'wasit' },
+  { id: 'Maysan', labelKey: 'maysan' },
+  { id: 'Dhi Qar', labelKey: 'dhiqar' },
+  { id: 'Muthanna', labelKey: 'muthanna' },
+  { id: 'Qadisiyyah', labelKey: 'qadisiyyah' },
+  { id: 'Saladin', labelKey: 'saladin' },
 ];
 
 export const MOCK_STORIES: Story[] = [
@@ -244,18 +257,18 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const MOCK_BUSINESSES: Business[] = [
-  { id: 1, name: "Baghdad Mall", category: "shopping", imageUrl: "https://picsum.photos/seed/b1/400/300", governorate: "Baghdad", isAccessible: true, rating: 4.5, priceRange: 'mid', amenities: ['Free Wi-Fi', 'Parking', 'Food Court'] },
-  { id: 2, name: "Shanidar Park", category: "tourism", imageUrl: "https://picsum.photos/seed/b2/400/300", governorate: "Erbil", isAccessible: false, rating: 4.8, priceRange: 'low', amenities: ['Gardens', 'Playground'] },
-  { id: 3, name: "Times Square Basra", category: "events", imageUrl: "https://picsum.photos/seed/b3/400/300", governorate: "Basra", isAccessible: true, rating: 4.2, priceRange: 'mid', amenities: ['Cinema', 'Restaurants', 'Shops'] },
-  { id: 4, name: "Family Mall", category: "shopping", imageUrl: "https://picsum.photos/seed/b4/400/300", governorate: "Slemani", isAccessible: true, rating: 4.6, priceRange: 'mid', amenities: ['Supermarket', 'Fashion', 'Cafe'] },
-  { id: 5, name: "Divan Erbil", category: "hotels", imageUrl: "https://picsum.photos/seed/b5/400/300", governorate: "Erbil", isAccessible: true, rating: 5.0, priceRange: 'high', amenities: ['Pool', 'Spa', 'Gym', 'Fine Dining'] },
-  { id: 6, name: "The Station", category: "business", imageUrl: "https://picsum.photos/seed/b6/400/300", governorate: "Baghdad", isAccessible: false, rating: 4.9, priceRange: 'mid', amenities: ['High-speed Wi-Fi', 'Meeting Rooms'] },
-  { id: 7, name: "Khan Murjan", category: "food", imageUrl: "https://picsum.photos/seed/b7/400/300", governorate: "Baghdad", isAccessible: false, rating: 4.7, priceRange: 'high', amenities: ['Traditional Iraqi Cuisine', 'Historic Building'] },
-  { id: 8, name: "Gali Ali Bag Waterfall", category: "tourism", imageUrl: "https://picsum.photos/seed/b8/400/300", governorate: "Erbil", isAccessible: false, rating: 4.8, priceRange: 'low', amenities: ['Nature', 'Scenery', 'Restaurants'] },
-  { id: 9, name: "Amna Suraka Museum", category: "tourism", imageUrl: "https://picsum.photos/seed/b9/400/300", governorate: "Slemani", isAccessible: true, rating: 4.5, priceRange: 'low', amenities: ['Historic Site', 'Exhibits'] },
-  { id: 10, name: "Duhok Mall", category: "shopping", imageUrl: "https://picsum.photos/seed/b10/400/300", governorate: "Duhok", isAccessible: true, rating: 4.3, priceRange: 'mid', amenities: ['Parking', 'Food Court'] },
-  { id: 11, name: "Majidi Land", category: "events", imageUrl: "https://picsum.photos/seed/b11/400/300", governorate: "Erbil", isAccessible: false, rating: 4.1, priceRange: 'mid', amenities: ['Amusement Park', 'Rides'] },
-  { id: 12, name: "Basra International Hotel", category: "hotels", imageUrl: "https://picsum.photos/seed/b12/400/300", governorate: "Basra", isAccessible: true, rating: 4.6, priceRange: 'high', amenities: ['Pool', 'Gym', 'Conference Rooms'] },
+  { id: 1, name: "Baghdad Mall", category: "shopping", imageUrl: "https://picsum.photos/seed/b1/400/300", governorate: "Baghdad", isAccessible: true, rating: 4.5, reviewCount: 128, priceRange: 'mid', amenities: ['Free Wi-Fi', 'Parking', 'Food Court'] },
+  { id: 2, name: "Shanidar Park", category: "tourism", imageUrl: "https://picsum.photos/seed/b2/400/300", governorate: "Erbil", isAccessible: false, rating: 4.8, reviewCount: 214, priceRange: 'low', amenities: ['Gardens', 'Playground'] },
+  { id: 3, name: "Times Square Basra", category: "events", imageUrl: "https://picsum.photos/seed/b3/400/300", governorate: "Basra", isAccessible: true, rating: 4.2, reviewCount: 91, priceRange: 'mid', amenities: ['Cinema', 'Restaurants', 'Shops'] },
+  { id: 4, name: "Family Mall", category: "shopping", imageUrl: "https://picsum.photos/seed/b4/400/300", governorate: "Slemani", isAccessible: true, rating: 4.6, reviewCount: 176, priceRange: 'mid', amenities: ['Supermarket', 'Fashion', 'Cafe'] },
+  { id: 5, name: "Divan Erbil", category: "hotels", imageUrl: "https://picsum.photos/seed/b5/400/300", governorate: "Erbil", isAccessible: true, rating: 5.0, reviewCount: 342, priceRange: 'high', amenities: ['Pool', 'Spa', 'Gym', 'Fine Dining'] },
+  { id: 6, name: "The Station", category: "business", imageUrl: "https://picsum.photos/seed/b6/400/300", governorate: "Baghdad", isAccessible: false, rating: 4.9, reviewCount: 287, priceRange: 'mid', amenities: ['High-speed Wi-Fi', 'Meeting Rooms'] },
+  { id: 7, name: "Khan Murjan", category: "food", imageUrl: "https://picsum.photos/seed/b7/400/300", governorate: "Baghdad", isAccessible: false, rating: 4.7, reviewCount: 203, priceRange: 'high', amenities: ['Traditional Iraqi Cuisine', 'Historic Building'] },
+  { id: 8, name: "Gali Ali Bag Waterfall", category: "tourism", imageUrl: "https://picsum.photos/seed/b8/400/300", governorate: "Erbil", isAccessible: false, rating: 4.8, reviewCount: 214, priceRange: 'low', amenities: ['Nature', 'Scenery', 'Restaurants'] },
+  { id: 9, name: "Amna Suraka Museum", category: "tourism", imageUrl: "https://picsum.photos/seed/b9/400/300", governorate: "Slemani", isAccessible: true, rating: 4.5, reviewCount: 128, priceRange: 'low', amenities: ['Historic Site', 'Exhibits'] },
+  { id: 10, name: "Duhok Mall", category: "shopping", imageUrl: "https://picsum.photos/seed/b10/400/300", governorate: "Duhok", isAccessible: true, rating: 4.3, reviewCount: 74, priceRange: 'mid', amenities: ['Parking', 'Food Court'] },
+  { id: 11, name: "Majidi Land", category: "events", imageUrl: "https://picsum.photos/seed/b11/400/300", governorate: "Erbil", isAccessible: false, rating: 4.1, reviewCount: 58, priceRange: 'mid', amenities: ['Amusement Park', 'Rides'] },
+  { id: 12, name: "Basra International Hotel", category: "hotels", imageUrl: "https://picsum.photos/seed/b12/400/300", governorate: "Basra", isAccessible: true, rating: 4.6, reviewCount: 176, priceRange: 'high', amenities: ['Pool', 'Gym', 'Conference Rooms'] },
 ];
 
 const now = new Date();
@@ -289,10 +302,23 @@ export const TRANSLATIONS: Record<Language, TranslationSet> = {
     governorates: {
       all: "All Governorates",
       baghdad: "Baghdad",
-      erbil: "Erbil",
       basra: "Basra",
-      slemani: "Slemani",
-      duhok: "Duhok"
+      erbil: "Erbil",
+      slemani: "Sulaymaniyah",
+      duhok: "Duhok",
+      nineveh: "Nineveh",
+      kirkuk: "Kirkuk",
+      karbala: "Karbala",
+      najaf: "Najaf",
+      anbar: "Anbar",
+      diyala: "Diyala",
+      babil: "Babil",
+      wasit: "Wasit",
+      maysan: "Maysan",
+      dhiqar: "Dhi Qar",
+      muthanna: "Muthanna",
+      qadisiyyah: "Qadisiyyah",
+      saladin: "Saladin"
     },
     categories: {
       food: "Dining & Cuisine",
@@ -565,7 +591,15 @@ export const TRANSLATIONS: Record<Language, TranslationSet> = {
         motionReduced: "Reduced",
         findInclusiveEventsTitle: "Find Inclusive Venues",
         accessibleVenue: "Accessible Venue"
-    }
+    },
+    browseByCity: "Browse by city:",
+    browseByCategory: "Browse by Category",
+    featuredInIraq: "Featured in Iraq",
+    highestRatedSub: "Highest rated across all cities",
+    aiCuratedEvents: "AI-Curated Events",
+    aiEventsSub: "Generated for Iraq this week",
+    exploreByGov: "Explore by Governorate",
+    comingSoon: "Coming soon"
   },
   ar: {
     header: {
@@ -586,10 +620,23 @@ export const TRANSLATIONS: Record<Language, TranslationSet> = {
     governorates: {
       all: "كل المحافظات",
       baghdad: "بغداد",
-      erbil: "أربيل",
       basra: "البصرة",
+      erbil: "أربيل",
       slemani: "السليمانية",
-      duhok: "دهوك"
+      duhok: "دهوك",
+      nineveh: "نينوى",
+      kirkuk: "كركوك",
+      karbala: "كربلاء",
+      najaf: "النجف",
+      anbar: "الأنبار",
+      diyala: "ديالى",
+      babil: "بابل",
+      wasit: "واسط",
+      maysan: "ميسان",
+      dhiqar: "ذي قار",
+      muthanna: "المثنى",
+      qadisiyyah: "القادسية",
+      saladin: "صلاح الدين"
     },
     categories: {
       food: "طعام ومأكولات",
@@ -862,7 +909,15 @@ export const TRANSLATIONS: Record<Language, TranslationSet> = {
         motionReduced: "مخفض",
         findInclusiveEventsTitle: "البحث عن أماكن شاملة",
         accessibleVenue: "مكان متاح للجميع"
-    }
+    },
+    browseByCity: "تصفح حسب المدينة:",
+    browseByCategory: "تصفح حسب الفئة",
+    featuredInIraq: "مميز في العراق",
+    highestRatedSub: "الأعلى تقييماً في جميع المدن",
+    aiCuratedEvents: "فعاليات مختارة بالذكاء الاصطناعي",
+    aiEventsSub: "تم إنشاؤها لهذا الأسبوع في العراق",
+    exploreByGov: "استكشف حسب المحافظة",
+    comingSoon: "قريباً"
   },
   ku: {
     header: {
@@ -882,11 +937,24 @@ export const TRANSLATIONS: Record<Language, TranslationSet> = {
     },
     governorates: {
       all: "هەموو پارێزگاکان",
-      baghdad: "بەغداد",
-      erbil: "هەولێر",
+      baghdad: "بەغدا",
       basra: "بەسرە",
+      erbil: "هەولێر",
       slemani: "سلێمانی",
-      duhok: "دهۆک"
+      duhok: "دهۆک",
+      nineveh: "نەینەوا",
+      kirkuk: "کەرکووک",
+      karbala: "کەربەلا",
+      najaf: "نەجەف",
+      anbar: "ئەنبار",
+      diyala: "دیالە",
+      babil: "بابل",
+      wasit: "واسط",
+      maysan: "مەیسان",
+      dhiqar: "زی قار",
+      muthanna: "موسەننا",
+      qadisiyyah: "قادسیە",
+      saladin: "سەلاحەدین"
     },
     categories: {
       food: "خواردن و چێشت",
@@ -1159,6 +1227,14 @@ export const TRANSLATIONS: Record<Language, TranslationSet> = {
         motionReduced: "کەمکراوە",
         findInclusiveEventsTitle: "دۆزینەوەی شوێنە گشتگیرەکان",
         accessibleVenue: "شوێنی گونجاو"
-    }
+    },
+    browseByCity: "بگەڕێ بە شار:",
+    browseByCategory: "بگەڕێ بە پۆل:",
+    featuredInIraq: "تایبەتمەند لە عێراق",
+    highestRatedSub: "بەرزترین نمرە لە هەموو شارەکان",
+    aiCuratedEvents: "بۆنەکانی دیاریکراوی زیرەکی دەستکرد",
+    aiEventsSub: "بۆ ئەم هەفتەیە لە عێراق دروستکراوە",
+    exploreByGov: "بگەڕێ بە پارێزگا",
+    comingSoon: "بەزووی"
   }
 };

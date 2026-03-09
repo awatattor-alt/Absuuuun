@@ -41,8 +41,8 @@ const CuratedEventsSlide: React.FC<CuratedEventsSlideProps> = ({ t }) => {
   return (
     <section>
       <div className="text-center max-w-2xl mx-auto">
-        <h2 className="text-3xl font-bold mb-4">{t.curatedEvents.title}</h2>
-        <p className="text-gray-400 mb-6">{t.curatedEvents.description}</p>
+        <h2 className="text-3xl font-bold mb-4">{t.aiCuratedEvents}</h2>
+        <p className="text-gray-400 mb-6">{t.aiEventsSub}</p>
         <button
           onClick={handleGenerateEvents}
           disabled={isLoading}

@@ -30,6 +30,7 @@ export interface Business {
   governorate: string;
   isAccessible?: boolean;
   rating: number;
+  reviewCount?: number;
   priceRange: 'low' | 'mid' | 'high';
   amenities: string[];
 }
@@ -73,10 +74,23 @@ export interface TranslationSet {
   governorates: {
     all: string;
     baghdad: string;
-    erbil: string;
     basra: string;
+    erbil: string;
     slemani: string;
     duhok: string;
+    nineveh: string;
+    kirkuk: string;
+    karbala: string;
+    najaf: string;
+    anbar: string;
+    diyala: string;
+    babil: string;
+    wasit: string;
+    maysan: string;
+    dhiqar: string;
+    muthanna: string;
+    qadisiyyah: string;
+    saladin: string;
   },
   categories: {
     food: string;
@@ -161,5 +175,13 @@ export interface TranslationSet {
     motionReduced: string;
     findInclusiveEventsTitle: string;
     accessibleVenue: string;
-  }
+  },
+  browseByCity: string;
+  browseByCategory: string;
+  featuredInIraq: string;
+  highestRatedSub: string;
+  aiCuratedEvents: string;
+  aiEventsSub: string;
+  exploreByGov: string;
+  comingSoon: string;
 }
